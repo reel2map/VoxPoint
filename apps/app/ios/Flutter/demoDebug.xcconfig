@@ -1,0 +1,6 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-demo.xcconfig"
+#include "Generated.xcconfig"
+
+ASSET_PREFIX=demo
+BUNDLE_NAME=Flametree (Demo)
+BUNDLE_DISPLAY_NAME=Flametree (Demo)

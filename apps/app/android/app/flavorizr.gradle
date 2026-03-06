@@ -1,0 +1,26 @@
+android {
+    flavorDimensions += "flavor-type"
+
+    productFlavors {
+        development {
+            dimension "flavor-type"
+            applicationId "ai.flametree.app.dev"
+            resValue "string", "app_name", "Flametree (Dev)"
+        }
+        staging {
+            dimension "flavor-type"
+            applicationId "ai.flametree.app.tst"
+            resValue "string", "app_name", "Flametree (Tst)"
+        }
+        demo {
+            dimension "flavor-type"
+            applicationId "ai.flametree.app.demo"
+            resValue "string", "app_name", "Flametree (Demo)"
+        }
+        production {
+            dimension "flavor-type"
+            applicationId "ai.flametree.app"
+            resValue "string", "app_name", "Flametree"
+        }
+    }
+}

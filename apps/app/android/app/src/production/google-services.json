@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "794170490506",
+    "project_id": "flametree-test",
+    "storage_bucket": "flametree-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794170490506:android:22e031f64afa1fcf073773",
+        "android_client_info": {
+          "package_name": "ai.flametree.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2CZCUwVpfAeaNm9U6a5W-dxhdQgoOgjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

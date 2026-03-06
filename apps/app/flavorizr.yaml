@@ -1,0 +1,59 @@
+flavors:
+  development:
+    app:
+      name: "Flametree (Dev)"
+    android:
+      applicationId: "ai.flametree.app.dev"
+    ios:
+      bundleId: "ai.flametree.app.dev"
+  staging:
+    app:
+      name: "Flametree (Tst)"
+    android:
+      applicationId: "ai.flametree.app.tst"
+    ios:
+      bundleId: "ai.flametree.app.tst"
+  demo:
+    app:
+      name: "Flametree (Demo)"
+    android:
+      applicationId: "ai.flametree.app.demo"
+    ios:
+      bundleId: "ai.flametree.app.demo"
+  production:
+    app:
+      name: "Flametree"
+    android:
+      applicationId: "ai.flametree.app"
+    ios:
+      bundleId: "ai.flametree.app"
+
+instructions:
+  [
+    "assets:download",
+    "assets:extract",
+    "android:androidManifest",
+    "android:buildGradle",
+    "android:flavorizrGradle",
+    "android:dummyAssets",
+    "android:icons",
+    "ios:podfile",
+    "ios:xcconfig",
+    "ios:buildTargets",
+    "ios:schema",
+    "ios:dummyAssets",
+    "ios:icons",
+    "ios:plist",
+    "ios:launchScreen",
+    "macos:podfile",
+    "macos:xcconfig",
+    "macos:configs",
+    "macos:buildTargets",
+    "macos:schema",
+    "macos:dummyAssets",
+    "macos:icons",
+    "macos:plist",
+    "google:firebase",
+    "huawei:agconnect",
+    "assets:clean",
+  ]
