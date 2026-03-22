@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}{{ listing.name }} — AgentStay{% endblock %}
+{% block description %}{{ listing.description_short or listing.description[:150] }}. Book directly. No platform fees.{% endblock %}
+{% block canonical_path %}/l/{{ listing.slug }}{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="{{ listing.name }} — AgentStay">
+<meta property="og:description" content="{{ listing.description_short or '' }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ base_url }}/l/{{ listing.slug }}">
+{% if listing.photos %}
+<meta property="og:image" content="{{ listing.photos[0].url }}">
+{% endif %}
+<meta property="og:site_name" content="AgentStay">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ listing.name }}">
+<meta name="twitter:description" content="{{ listing.description_short or '' }}">
+{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VacationRental",
+  "name": {{ listing.name | tojson }},
+  "description": {{ (listing.description or '') | tojson }},
+  "url": "{{ base_url }}/l/{{ listing.slug }}",
+  "image": [{% for p in listing.photos %}"{{ p.url }}"{% if not loop.last %},{% endif %}{% endfor %}],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ (listing.address or '') | tojson }},
+    "addressLocality": {{ listing.city | tojson }},
+    "addressCountry": {{ listing.country | tojson }}
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ listing.lat or 43.7696 }},
+    "longitude": {{ listing.lng or 11.2558 }}
+  },
+  "numberOfBedrooms": {{ listing.bedrooms }},
+  "numberOfBathroomsTotal": {{ listing.bathrooms }},
+  "occupancy": { "@type": "QuantitativeValue", "maxValue": {{ listing.max_guests }} },
+  "amenityFeature": [{% for a in (listing.amenities or []) %}{"@type":"LocationFeatureSpecification","name":{{ a | tojson }},"value":true}{% if not loop.last %},{% endif %}{% endfor %}],
+  "priceRange": "€{{ listing.base_price }} per night",
+  {% if listing.trust_card %}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ listing.trust_card.overall }}",
+    "reviewCount": "{{ listing.trust_card.total_reviews }}"
+  },
+  {% endif %}
+  "potentialAction": {
+    "@type": "ReserveAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ base_url }}/api/v1/listings/{{ listing.slug }}/availability?check_in={check_in}&check_out={check_out}&guests={guests}",
+      "httpMethod": "GET"
+    }
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},
+    {"@type":"ListItem","position":2,"name":"{{ listing.city }}","item":"{{ base_url }}/?city={{ listing.city|lower }}"},
+    {"@type":"ListItem","position":3,"name":"{{ listing.name }}"}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs">
+    <a href="/">Home</a>
+    <span>›</span>
+    <a href="/?city={{ listing.city|lower }}">{{ listing.city }}</a>
+    <span>›</span>
+    {{ listing.name }}
+  </nav>
+
+  <div class="listing-layout">
+    <!-- Main content -->
+    <article class="listing-main">
+
+      <!-- 1. Photo gallery -->
+      <section class="photo-gallery">
+        {% set cover = listing.photos[0] if listing.photos else none %}
+        {% if cover %}
+        <img class="photo-cover" src="{{ cover.url }}" alt="{{ cover.caption or listing.name }}">
+        {% else %}
+        <img class="photo-cover" src="https://placehold.co/800x450/E8DDD0/7A7267?text={{ listing.name|urlencode }}" alt="{{ listing.name }}">
+        {% endif %}
+        {% if listing.photos|length > 1 %}
+        <div class="photo-thumbnails">
+          {% for photo in listing.photos[1:5] %}
+          <img class="photo-thumb" src="{{ photo.url }}" alt="{{ photo.caption or listing.name }}" loading="lazy">
+          {% endfor %}
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- 2. Header -->
+      <section class="content-section">
+        <p class="listing-tag">{{ listing.city }}, {{ listing.country }} — {{ listing.neighborhood or '' }}</p>
+        <h1 class="listing-title">{{ listing.name }}</h1>
+        {% if listing.description_short %}
+        <p class="listing-short">{{ listing.description_short }}</p>
+        {% endif %}
+        <div class="listing-stats">
+          {% if listing.trust_card %}
+          <div class="stat-item"><strong>★ {{ listing.trust_card.overall }}</strong> rating ({{ listing.trust_card.total_reviews }} reviews)</div>
+          {% endif %}
+          {% if listing.size_sqm %}<div class="stat-item"><strong>{{ listing.size_sqm }}m²</strong></div>{% endif %}
+          <div class="stat-item"><strong>{{ listing.bedrooms }}</strong> bed{% if listing.bedrooms != 1 %}s{% endif %}</div>
+          <div class="stat-item"><strong>{{ listing.max_guests }}</strong> guests max</div>
+          {% if listing.nearby_landmarks and listing.nearby_landmarks|length > 0 %}
+          <div class="stat-item">📍 {{ listing.nearby_landmarks[0].name }} {{ listing.nearby_landmarks[0].distance_meters }}m</div>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- 4. Description -->
+      <section class="content-section">
+        <h2>About this apartment</h2>
+        {% if listing.description %}
+          {% for para in listing.description.split('\n\n') %}
+          <p>{{ para }}</p>
+          {% endfor %}
+        {% endif %}
+      </section>
+
+      <!-- 5. Amenities -->
+      <section class="content-section">
+        <h2>Amenities</h2>
+        <div class="amenities-grid">
+          {% for amenity in (listing.amenities or []) %}
+          <div class="amenity-item">{{ amenity | replace('_', ' ') | title }}</div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 6. Trust Card -->
+      {% if listing.trust_card %}
+      <section class="content-section trust-card" id="reviews">
+        <h2>Guest reviews</h2>
+        <div class="trust-overall">
+          <span class="rating-big">{{ listing.trust_card.overall }}</span>
+          <div>
+            <div class="stars">★★★★★</div>
+            <div class="rating-meta">across {{ listing.trust_card.total_reviews }} verified reviews</div>
+          </div>
+        </div>
+        <div class="trust-badges">
+          {% if listing.trust_card.airbnb %}
+          <a href="{{ listing.trust_card.airbnb.url }}" target="_blank" rel="noopener" class="platform-badge">
+            <span class="platform-name">Airbnb</span>
+            <span>★ {{ listing.trust_card.airbnb.rating }}</span>
+            <span style="color:var(--muted)">({{ listing.trust_card.airbnb.count }})</span>
+          </a>
+          {% endif %}
+          {% if listing.trust_card.booking %}
+          <a href="{{ listing.trust_card.booking.url }}" target="_blank" rel="noopener" class="platform-badge">
+            <span class="platform-name">Booking.com</span>
+            <span>{{ listing.trust_card.booking.rating }}/10</span>
+            <span style="color:var(--muted)">({{ listing.trust_card.booking.count }})</span>
+          </a>
+          {% endif %}
+          {% if listing.trust_card.google %}
+          <a href="{{ listing.trust_card.google.url }}" target="_blank" rel="noopener" class="platform-badge">
+            <span class="platform-name">Google</span>
+            <span>★ {{ listing.trust_card.google.rating }}</span>
+            <span style="color:var(--muted)">({{ listing.trust_card.google.count }})</span>
+          </a>
+          {% endif %}
+        </div>
+        {% if listing.trust_card.summary %}
+        <blockquote class="trust-summary">"{{ listing.trust_card.summary }}"</blockquote>
+        {% endif %}
+        {% if listing.trust_card.top_reviews %}
+          {% for review in listing.trust_card.top_reviews %}
+          <div class="review">
+            <div class="review-header">
+              <span class="review-author">{{ review.author }}</span>
+              <span class="review-source">via {{ review.source }}</span>
+              <span class="review-rating">★ {{ review.rating }}/5</span>
+            </div>
+            <p>{{ review.text }}</p>
+          </div>
+          {% endfor %}
+        {% endif %}
+        <p class="trust-verify">
+          Verify reviews:
+          {% if listing.trust_card.airbnb %}<a href="{{ listing.trust_card.airbnb.url }}" target="_blank">Airbnb</a>{% endif %}
+          {% if listing.trust_card.booking %} · <a href="{{ listing.trust_card.booking.url }}" target="_blank">Booking.com</a>{% endif %}
+          {% if listing.trust_card.google %} · <a href="{{ listing.trust_card.google.url }}" target="_blank">Google</a>{% endif %}
+        </p>
+      </section>
+      {% endif %}
+
+      <!-- 7. Pricing -->
+      <section class="content-section">
+        <h2>Pricing</h2>
+        <table class="pricing-table">
+          {% for season in (listing.seasonal_pricing or []) %}
+          <tr>
+            <td>{{ season.label }} ({{ season.start }} – {{ season.end }})</td>
+            <td>€{{ season.price }}/night</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td>Cleaning fee (one time)</td>
+            <td>€{{ "%.0f"|format(listing.cleaning_fee) }}</td>
+          </tr>
+        </table>
+        <p class="discount-note">✓ 7+ nights: 10% off &nbsp;·&nbsp; 28+ nights: 20% off</p>
+        {% if listing.additional_services %}
+        <div style="margin-top:16px;">
+          <strong>Additional services:</strong>
+          <ul style="margin-top:8px;padding-left:20px;color:var(--muted);font-size:0.9rem;">
+            {% for svc in listing.additional_services %}
+            <li>{{ svc.name | replace('_',' ') | title }} — €{{ svc.price }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- 8. House rules -->
+      <section class="content-section">
+        <h2>House rules</h2>
+        {% if listing.house_rules %}
+        <div style="display:flex;gap:24px;flex-wrap:wrap;color:var(--muted);font-size:0.95rem;">
+          <div>🕒 Check-in: <strong>{{ listing.house_rules.check_in }}</strong></div>
+          <div>🕚 Check-out: <strong>{{ listing.house_rules.check_out }}</strong></div>
+          <div>📅 Min stay: <strong>{{ listing.house_rules.min_nights }} nights</strong></div>
+          <div>🚬 Smoking: <strong>{{ 'Allowed' if listing.house_rules.smoking else 'No' }}</strong></div>
+          <div>🐾 Pets: <strong>{{ 'Welcome' if listing.house_rules.pets else 'No' }}</strong></div>
+          <div>🎉 Parties: <strong>{{ 'Allowed' if listing.house_rules.parties else 'No' }}</strong></div>
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- 9. Location -->
+      <section class="content-section">
+        <h2>Location</h2>
+        <p style="color:var(--muted);margin-bottom:16px;">{{ listing.neighborhood }}, {{ listing.city }}</p>
+        {% if listing.nearby_landmarks %}
+        <ul class="landmark-list">
+          {% for lm in listing.nearby_landmarks %}
+          <li>{{ lm.name }} — {{ lm.distance_meters }}m</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </section>
+
+      <!-- 10. Host -->
+      {% if listing.host %}
+      <section class="content-section">
+        <h2>Your host: {{ listing.host.name }}</h2>
+        <p style="color:var(--muted);">Languages: {{ listing.host.languages | join(', ') if listing.host.languages else 'English' }}</p>
+        <p style="color:var(--muted);">Typically responds within 2 hours</p>
+      </section>
+      {% endif %}
+
+      <!-- 11. API section -->
+      <section class="content-section api-section">
+        <h2>Built for AI agents</h2>
+        <p>This property has a public API. AI assistants can check availability and book directly.</p>
+        <div class="endpoint-cards">
+          <div class="ep"><span class="method get">GET</span>/api/v1/listings/{{ listing.slug }}</div>
+          <div class="ep"><span class="method get">GET</span>/api/v1/listings/{{ listing.slug }}/availability</div>
+          <div class="ep"><span class="method post">POST</span>/api/v1/bookings</div>
+        </div>
+        <div class="api-links">
+          <a href="/docs">Full API documentation →</a>
+          <a href="/openapi.json">OpenAPI spec →</a>
+          <a href="/.well-known/ai-plugin.json">AI Plugin →</a>
+        </div>
+      </section>
+
+    </article>
+
+    <!-- 3. Booking CTA (sticky) -->
+    <aside>
+      <div class="booking-cta">
+        <div class="cta-price">From €{{ "%.0f"|format(listing.base_price) }}<span>/night</span></div>
+        {% if listing.trust_card %}
+        <div style="margin-bottom:14px;font-size:0.9rem;color:var(--muted);">★ {{ listing.trust_card.overall }} · {{ listing.trust_card.total_reviews }} reviews</div>
+        {% endif %}
+        <form class="cta-form" action="/l/{{ listing.slug }}#availability" method="get">
+          <input type="date" name="check_in" placeholder="Check-in" required>
+          <input type="date" name="check_out" placeholder="Check-out" required>
+          <select name="guests">
+            {% for n in range(1, listing.max_guests + 1) %}
+            <option value="{{ n }}">{{ n }} guest{{ 's' if n > 1 }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="btn-book">Check availability</button>
+        </form>
+        <p class="cta-note">✓ Book directly — no Airbnb fees</p>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:0.85rem;color:var(--muted);">
+          <div>🧹 Cleaning: €{{ "%.0f"|format(listing.cleaning_fee) }}</div>
+          <div style="margin-top:4px;">✓ Free cancellation up to 14 days before</div>
+        </div>
+      </div>
+
+      <!-- Cancellation policy card -->
+      <div class="booking-cta" style="margin-top:16px;">
+        <h3 style="font-size:0.9rem;margin-bottom:10px;">Cancellation policy</h3>
+        {% if listing.cancellation_policy and listing.cancellation_policy.rules %}
+          {% for rule in listing.cancellation_policy.rules %}
+          <div style="font-size:0.85rem;color:var(--muted);margin-bottom:4px;">
+            {% if rule.days_before > 0 %}{{ rule.days_before }}+ days before:{% else %}Last minute:{% endif %}
+            <strong style="color:var(--success);">{{ rule.refund_percent }}% refund</strong>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} | AgentStay{% endblock %}
+{% block description %}{{ article.meta_description or '' }}{% endblock %}
+{% block canonical_path %}/blog/{{ article.slug }}{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="{{ article.title }}">
+<meta property="og:description" content="{{ article.meta_description or '' }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ base_url }}/blog/{{ article.slug }}">
+<meta property="og:site_name" content="AgentStay">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ article.title }}">
+{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | tojson }},
+  "datePublished": "{{ article.published_at.strftime('%Y-%m-%d') if article.published_at else '2026-01-01' }}",
+  "dateModified": "{{ article.updated_at.strftime('%Y-%m-%d') if article.updated_at else '2026-01-01' }}",
+  "author": { "@type": "Organization", "name": "AgentStay" },
+  "publisher": { "@type": "Organization", "name": "AgentStay" },
+  "description": {{ (article.meta_description or '') | tojson }}
+}
+</script>
+{% if article.faq %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in article.faq %}
+    {
+      "@type": "Question",
+      "name": {{ faq.question | tojson }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ faq.answer | tojson }}
+      }
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},
+    {"@type":"ListItem","position":2,"name":"Blog","item":"{{ base_url }}/blog"},
+    {"@type":"ListItem","position":3,"name":{{ article.title | tojson }}}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="article-layout">
+    <!-- Main article -->
+    <article class="article-content">
+      <nav class="breadcrumbs">
+        <a href="/">Home</a><span>›</span>
+        <a href="/blog">Blog</a><span>›</span>
+        {{ article.title[:50] }}{% if article.title|length > 50 %}…{% endif %}
+      </nav>
+
+      <h1 class="article-title" style="margin-top:16px;">{{ article.title }}</h1>
+      <div class="article-meta">
+        <span>AgentStay</span>
+        <span>·</span>
+        <span>{{ article.published_at.strftime('%B %d, %Y') if article.published_at else 'January 2026' }}</span>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+
+      <!-- Article content (rendered HTML with embedded listing cards) -->
+      {{ rendered_content | safe }}
+
+      <!-- FAQ -->
+      {% if article.faq %}
+      <section class="faq-section">
+        <h2>Frequently asked questions</h2>
+        {% for faq in article.faq %}
+        <details>
+          <summary>{{ faq.question }}</summary>
+          <p>{{ faq.answer }}</p>
+        </details>
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <!-- Bottom CTA -->
+      <section class="cta-bottom">
+        <h2>Find your perfect apartment{% if article.city %} in {{ article.city | title }}{% endif %}</h2>
+        <p>Book directly — save 15–20% vs Airbnb</p>
+        <form class="cta-search-form" action="/">
+          {% if article.city %}<input type="hidden" name="city" value="{{ article.city|lower }}">{% endif %}
+          <input type="date" name="check_in" required placeholder="Check-in">
+          <input type="date" name="check_out" required placeholder="Check-out">
+          <select name="guests">
+            <option value="2">2 guests</option>
+            <option value="3">3 guests</option>
+            <option value="4">4 guests</option>
+            <option value="6">6 guests</option>
+          </select>
+          <button type="submit">Search apartments</button>
+        </form>
+        <p class="savings-note">✓ No platform fees · Verified reviews · Direct contact with hosts</p>
+      </section>
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="article-sidebar">
+      <div class="sidebar-card">
+        <h3>Quick search</h3>
+        <form class="sidebar-form" action="/">
+          {% if article.city %}<input type="hidden" name="city" value="{{ article.city|lower }}">{% endif %}
+          <input type="date" name="check_in" placeholder="Check-in">
+          <input type="date" name="check_out" placeholder="Check-out">
+          <select name="guests">
+            <option value="2">2 guests</option>
+            <option value="3">3 guests</option>
+            <option value="4">4 guests</option>
+          </select>
+          <button type="submit" class="btn-book" style="width:100%;">Search →</button>
+        </form>
+      </div>
+
+      {% if related_listings %}
+      <div class="sidebar-card">
+        <h3>Featured apartments</h3>
+        {% for listing in related_listings %}
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          {% if listing.cover_photo %}
+          <a href="/l/{{ listing.slug }}"><img src="{{ listing.cover_photo.url }}" alt="{{ listing.name }}" style="width:100%;border-radius:6px;margin-bottom:8px;aspect-ratio:16/9;object-fit:cover;"></a>
+          {% endif %}
+          <div style="font-size:0.85rem;color:var(--accent);">{% if listing.trust_card %}★ {{ listing.trust_card.overall }}{% endif %}</div>
+          <a href="/l/{{ listing.slug }}" style="color:var(--text);text-decoration:none;font-weight:600;font-size:0.9rem;">{{ listing.name }}</a>
+          <div style="color:var(--muted);font-size:0.85rem;margin-top:4px;">From €{{ "%.0f"|format(listing.base_price) }}/night</div>
+          <a href="/l/{{ listing.slug }}" class="card-cta" style="margin-top:8px;display:block;padding:6px;font-size:0.85rem;">Check availability →</a>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

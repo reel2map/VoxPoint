@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AgentStay — Book directly. No platform fees.{% endblock %}</title>
+  <meta name="description" content="{% block description %}Find and book apartments directly from owners in Florence and beyond. No Airbnb fees, no middlemen.{% endblock %}">
+  <link rel="canonical" href="{{ base_url }}{% block canonical_path %}/{% endblock %}">
+  {% block og_tags %}
+  <meta property="og:title" content="AgentStay — Book directly. No platform fees.">
+  <meta property="og:description" content="Find and book apartments directly. Save 15-20% vs Airbnb.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ base_url }}/">
+  <meta property="og:site_name" content="AgentStay">
+  <meta name="twitter:card" content="summary_large_image">
+  {% endblock %}
+  {% block ld_json %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "AgentStay",
+    "url": "{{ base_url }}",
+    "description": "Direct vacation rental booking — no platform fees",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "{{ base_url }}/api/v1/listings?city={city}&check_in={check_in}&check_out={check_out}&guests={guests}"
+      },
+      "query-input": [
+        "required name=city",
+        "name=check_in",
+        "name=check_out",
+        "name=guests"
+      ]
+    }
+  }
+  </script>
+  {% endblock %}
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">Agent<span>Stay</span></a>
+      <nav class="nav">
+        <a href="/">Catalog</a>
+        <a href="/blog">Blog</a>
+        <a href="/docs" class="btn-api">API Docs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-white">AgentStay</div>
+          <p>Book directly. No platform fees.<br>hello@agentstay.com</p>
+          <div class="ai-badges" style="margin-top:16px;">
+            <span class="ai-badge">GPTBot ✓</span>
+            <span class="ai-badge">ClaudeBot ✓</span>
+            <span class="ai-badge">PerplexityBot ✓</span>
+            <span class="ai-badge">MCP Ready</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="/">Catalog</a>
+          <a href="/blog">Blog</a>
+          <a href="/docs">API Docs</a>
+          <a href="/openapi.json">OpenAPI Spec</a>
+          <a href="/.well-known/ai-plugin.json">AI Plugin</a>
+        </div>
+        <div class="footer-col">
+          <h4>Discover</h4>
+          <a href="/sitemap.xml">Sitemap</a>
+          <a href="/robots.txt">robots.txt</a>
+          <a href="/.well-known/agent-card.json">Agent Card</a>
+          <a href="/api/v1/health">System Health</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 AgentStay · Direct booking, no middlemen</span>
+        <span>Optimized for humans and AI agents</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

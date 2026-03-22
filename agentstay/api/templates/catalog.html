@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}AgentStay — Apartments in Florence & Italy | Book directly{% endblock %}
+{% block description %}Find and book apartments directly from owners. No Airbnb fees. Centro Storico, Oltrarno, Santa Croce. Verified reviews.{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>Find your perfect apartment.<br><span>Book directly.</span></h1>
+    <p>Save 15–20% vs Airbnb. No platform fees. Direct contact with hosts.</p>
+    <form class="search-form" action="/" method="get">
+      <div class="search-field">
+        <label>City</label>
+        <select name="city">
+          <option value="">All cities</option>
+          {% for city in cities %}
+          <option value="{{ city.city|lower }}" {% if city.city|lower == selected_city %}selected{% endif %}>
+            {{ city.city }} ({{ city.listing_count }})
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Check-in</label>
+        <input type="date" name="check_in" value="{{ selected_check_in or '' }}">
+      </div>
+      <div class="search-field">
+        <label>Check-out</label>
+        <input type="date" name="check_out" value="{{ selected_check_out or '' }}">
+      </div>
+      <div class="search-field">
+        <label>Guests</label>
+        <select name="guests">
+          {% for n in [1,2,3,4,5,6] %}
+          <option value="{{ n }}" {% if n == selected_guests %}selected{% endif %}>{{ n }} guest{{ 's' if n > 1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn-search">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- Listings -->
+<section style="padding: 48px 0;">
+  <div class="container">
+    <h2 class="section-title">
+      {% if selected_city %}Apartments in {{ selected_city|title }}{% else %}All apartments{% endif %}
+      <span style="font-size:1rem;font-weight:400;color:var(--muted);"> — {{ listings|length }} found</span>
+    </h2>
+    {% if listings %}
+    <div class="listing-grid">
+      {% for listing in listings %}
+      <div class="listing-card">
+        <div class="card-img">
+          {% if listing.cover_photo %}
+          <img src="{{ listing.cover_photo.url }}" alt="{{ listing.cover_photo.caption or listing.name }}" loading="lazy">
+          {% else %}
+          <img src="https://placehold.co/640x480/E8DDD0/7A7267?text={{ listing.name|urlencode }}" alt="{{ listing.name }}">
+          {% endif %}
+          <span class="card-tag">{{ listing.neighborhood or listing.city }}</span>
+        </div>
+        <div class="card-body">
+          {% if listing.trust_card %}
+          <div class="card-rating">★ {{ listing.trust_card.overall }} ({{ listing.trust_card.total_reviews }} reviews)</div>
+          {% endif %}
+          <h3 class="card-title"><a href="/l/{{ listing.slug }}">{{ listing.name }}</a></h3>
+          <p class="card-details">
+            {{ listing.bedrooms }} bed{% if listing.bedrooms != 1 %}s{% endif %} ·
+            {{ listing.max_guests }} guests ·
+            {% if listing.size_sqm %}{{ listing.size_sqm }}m²{% endif %}
+          </p>
+          <div class="card-price">From €{{ "%.0f"|format(listing.base_price) }}<span>/night</span></div>
+          <a href="/l/{{ listing.slug }}" class="card-cta">Check availability →</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:var(--muted);padding:40px 0;">No apartments found for your search. Try different dates or city.</p>
+    {% endif %}
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How it works</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Search</h3>
+        <p>Browse apartments with verified reviews from Airbnb, Booking.com & Google</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Book directly</h3>
+        <p>Send a booking request directly to the host — no middleman, no platform fees</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Host confirms</h3>
+        <p>Receive confirmation within 24 hours. Host sends a secure payment link.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Enjoy &amp; save</h3>
+        <p>Stay in a quality apartment and save 15–20% vs booking through Airbnb</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Agent section -->
+<section class="ai-section">
+  <div class="container">
+    <h2>Built for AI agents</h2>
+    <p>AgentStay has a complete REST API so AI assistants can search and book on your behalf.</p>
+    <div class="ai-grid">
+      <div class="ai-card">
+        <h3>REST API</h3>
+        <p>Full OpenAPI 3.1 spec. Search, check availability, create bookings.</p>
+        <a href="/docs" style="color:var(--accent);font-size:0.85rem;">View docs →</a>
+      </div>
+      <div class="ai-card">
+        <h3>MCP Server</h3>
+        <p>Connect to Claude Desktop via Model Context Protocol for natural language booking.</p>
+        <code>claude desktop config</code>
+      </div>
+      <div class="ai-card">
+        <h3>AI Plugin</h3>
+        <p>Compatible with ChatGPT plugins and A2A agent cards.</p>
+        <a href="/.well-known/ai-plugin.json" style="color:var(--accent);font-size:0.85rem;">ai-plugin.json →</a>
+      </div>
+    </div>
+    <div class="ai-links">
+      <a href="/openapi.json">OpenAPI Spec →</a>
+      <a href="/.well-known/ai-plugin.json">ChatGPT Plugin →</a>
+      <a href="/.well-known/agent-card.json">Agent Card →</a>
+      <a href="/api/v1/health">System Health →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
