@@ -152,7 +152,8 @@ async def homepage(
 ):
     settings = get_settings()
     query = select(Listing).options(
-        selectinload(Listing.photos)
+        selectinload(Listing.photos),
+        selectinload(Listing.host)
     ).where(Listing.status == "active")
 
     if city:
@@ -228,7 +229,7 @@ async def blog_article(slug: str, request: Request, db: AsyncSession = Depends(g
         for lslug in article.related_listing_slugs[:3]:
             r = await db.execute(
                 select(Listing)
-                .options(selectinload(Listing.photos))
+                .options(selectinload(Listing.photos), selectinload(Listing.host))
                 .where(Listing.slug == lslug, Listing.status == "active")
             )
             listing = r.scalar_one_or_none()
