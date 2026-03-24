@@ -3,38 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}AgentStay — Book directly. No platform fees.{% endblock %}</title>
-  <meta name="description" content="{% block description %}Find and book apartments directly from owners in Florence and beyond. No Airbnb fees, no middlemen.{% endblock %}">
+  <title>{% block title %}F1 Penthouse Florence — Ferrari-Themed Penthouse for 7 Guests{% endblock %}</title>
+  <meta name="description" content="{% block description %}Book the F1 Penthouse Florence directly. Ferrari-themed penthouse for up to 7 guests near Ponte Vecchio. 3 bedrooms, 2 terraces, rated 4.94/5. No platform fees.{% endblock %}">
   <link rel="canonical" href="{{ base_url }}{% block canonical_path %}/{% endblock %}">
   {% block og_tags %}
-  <meta property="og:title" content="AgentStay — Book directly. No platform fees.">
-  <meta property="og:description" content="Find and book apartments directly. Save 15-20% vs Airbnb.">
+  <meta property="og:title" content="F1 Penthouse Florence — Ferrari-Themed Penthouse">
+  <meta property="og:description" content="Direct booking. Ferrari-themed penthouse for 7 guests. Ponte Vecchio 8 min, Uffizi 9 min. Rated 4.94/5.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ base_url }}/">
-  <meta property="og:site_name" content="AgentStay">
+  <meta property="og:site_name" content="F1 Penthouse Florence">
   <meta name="twitter:card" content="summary_large_image">
   {% endblock %}
   {% block ld_json %}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "AgentStay",
+    "@type": "LodgingBusiness",
+    "name": "F1 Penthouse Florence",
     "url": "{{ base_url }}",
-    "description": "Direct vacation rental booking — no platform fees",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "{{ base_url }}/api/v1/listings?city={city}&check_in={check_in}&check_out={check_out}&guests={guests}"
-      },
-      "query-input": [
-        "required name=city",
-        "name=check_in",
-        "name=check_out",
-        "name=guests"
-      ]
-    }
+    "description": "Ferrari-themed penthouse for up to 7 guests in central Florence",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Via dei Federighi 1",
+      "addressLocality": "Florence",
+      "postalCode": "50123",
+      "addressCountry": "IT"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 43.7712,
+      "longitude": 11.2489
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.94",
+      "reviewCount": "48"
+    },
+    "telephone": "+39 3311385266",
+    "email": "info@f1penthouse.com"
   }
   </script>
   {% endblock %}
@@ -43,11 +49,13 @@
 <body>
   <header class="site-header">
     <div class="container">
-      <a href="/" class="logo">Agent<span>Stay</span></a>
+      <a href="/" class="logo">F1 <span>Penthouse</span></a>
       <nav class="nav">
-        <a href="/">Catalog</a>
+        <a href="/penthouse-florence">The Penthouse</a>
+        <a href="/reviews">Reviews</a>
+        <a href="/location">Location</a>
         <a href="/blog">Blog</a>
-        <a href="/docs" class="btn-api">API Docs</a>
+        <a href="/book" class="btn-book">Book Direct</a>
       </nav>
     </div>
   </header>
@@ -60,33 +68,45 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo-white">AgentStay</div>
-          <p>Book directly. No platform fees.<br>hello@agentstay.com</p>
+          <div class="footer-logo">F1 Penthouse Florence</div>
+          <p>Ferrari-themed penthouse for up to 7 guests.<br>
+          Via dei Federighi 1, Florence, Italy</p>
+          <p style="margin-top:8px;">
+            <a href="tel:+393311385266" style="color:var(--muted);">+39 331 138 5266</a><br>
+            <a href="mailto:info@f1penthouse.com" style="color:var(--muted);">info@f1penthouse.com</a>
+          </p>
           <div class="ai-badges" style="margin-top:16px;">
             <span class="ai-badge">GPTBot ✓</span>
             <span class="ai-badge">ClaudeBot ✓</span>
-            <span class="ai-badge">PerplexityBot ✓</span>
             <span class="ai-badge">MCP Ready</span>
           </div>
         </div>
         <div class="footer-col">
-          <h4>Platform</h4>
-          <a href="/">Catalog</a>
-          <a href="/blog">Blog</a>
-          <a href="/docs">API Docs</a>
-          <a href="/openapi.json">OpenAPI Spec</a>
-          <a href="/.well-known/ai-plugin.json">AI Plugin</a>
+          <h4>The Property</h4>
+          <a href="/penthouse-florence">About the Penthouse</a>
+          <a href="/availability">Check Availability</a>
+          <a href="/reviews">Guest Reviews</a>
+          <a href="/location">Location &amp; Map</a>
+          <a href="/faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Booking</h4>
+          <a href="/book">Book Direct</a>
+          <a href="/booking-policies">Booking Policies</a>
+          <a href="/contact">Contact Host</a>
+          <a href="{{ property.airbnb_url }}" target="_blank" rel="noopener">View on Airbnb</a>
         </div>
         <div class="footer-col">
           <h4>Discover</h4>
+          <a href="/blog">Travel Blog</a>
+          <a href="/api">API for Agents</a>
+          <a href="/mcp">MCP Server</a>
+          <a href="/docs">API Docs</a>
           <a href="/sitemap.xml">Sitemap</a>
-          <a href="/robots.txt">robots.txt</a>
-          <a href="/.well-known/agent-card.json">Agent Card</a>
-          <a href="/api/v1/health">System Health</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 AgentStay · Direct booking, no middlemen</span>
+        <span>© 2026 F1 Penthouse Florence · Direct booking, no platform fees</span>
         <span>Optimized for humans and AI agents</span>
       </div>
     </div>

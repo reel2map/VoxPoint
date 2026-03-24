@@ -1,4 +1,4 @@
-"""Blog article seed content for AgentStay."""
+"""Blog article content for F1 Penthouse Florence."""
 
 ARTICLE_1_CONTENT = """<p>Florence's historic center is remarkably compact — you can walk from the Duomo to the Palazzo Pitti in 20 minutes. But choosing the right neighborhood shapes your entire experience. For first-time visitors, <strong>Centro Storico</strong> puts you within 200 meters of the Duomo, the Uffizi, and Ponte Vecchio, with renovated 2-bedroom apartments from €150/night. For travelers seeking authentic local atmosphere, <strong>Oltrarno</strong> across the Arno river offers artisan workshops and wine bars, with charming studios from €90/night. Families should consider <strong>Santa Croce</strong>, where wider streets, parks, and the Sant'Ambrogio market make daily life easy — and spacious 3-bedroom apartments with terraces start at €200/night.</p>
 
@@ -188,3 +188,9 @@ ARTICLES = [
         "related_listing_slugs": ["elegant-apartment-near-duomo", "luxury-penthouse-terrace"]
     }
 ]
+
+# ── BLOG_CONTENT: maps content_key → HTML ─────────────────────────────────────
+BLOG_CONTENT: dict[str, str] = {
+    "neighborhoods": ARTICLE_1_CONTENT,
+    "cost_comparison": ARTICLE_2_CONTENT,
+}

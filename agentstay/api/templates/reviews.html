@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Guest Reviews — F1 Penthouse Florence · Rated {{ property.trust.overall }}/5{% endblock %}
+{% block description %}{{ property.trust.total_reviews }} verified guest reviews for F1 Penthouse Florence. Rated {{ property.trust.overall }}/5 on Airbnb. {{ property.trust.summary[:120] }}{% endblock %}
+{% block canonical_path %}/reviews{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "F1 Penthouse Florence",
+  "url": "{{ base_url }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ property.trust.overall }}",
+    "bestRating": "5",
+    "reviewCount": "{{ property.trust.total_reviews }}"
+  },
+  "review": [
+    {% for review in property.trust.reviews %}
+    {
+      "@type": "Review",
+      "author": {"@type": "Person", "name": "{{ review.author }}"},
+      "reviewRating": {"@type": "Rating", "ratingValue": "{{ review.rating }}"},
+      "reviewBody": {{ review.text | tojson }},
+      "datePublished": "2026-01-01"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 32px 0;">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="/">Home</a><span>›</span>
+      Guest Reviews
+    </nav>
+
+    <h1 class="section-title" style="margin-top:16px;">Guest Reviews</h1>
+
+    <!-- OVERALL SCORE -->
+    <div class="trust-card" style="margin-bottom:40px;">
+      <div class="trust-overall">
+        <div class="rating-big">{{ property.trust.overall }}</div>
+        <div>
+          <div class="stars">★★★★★</div>
+          <div class="rating-meta">{{ property.trust.total_reviews }} verified reviews · Airbnb</div>
+        </div>
+      </div>
+
+      <div class="trust-scores">
+        {% for key, val in property.trust.scores.items() %}
+        <div class="score-item">
+          <span class="val">{{ val }}</span>
+          <span class="lbl">{{ key | title }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <blockquote class="trust-summary">{{ property.trust.summary }}</blockquote>
+
+      {% for review in property.trust.reviews %}
+      <div class="review">
+        <div class="review-header">
+          <span class="review-author">{{ review.author }}</span>
+          <span class="review-source">via {{ review.source }}</span>
+          <span class="review-date">{{ review.date }}</span>
+          <span class="review-rating">{% for _ in range(review.rating) %}★{% endfor %}</span>
+        </div>
+        <p>"{{ review.text }}"</p>
+      </div>
+      {% endfor %}
+
+      <p class="trust-verify">
+        All reviews collected and verified via Airbnb. ·
+        <a href="{{ property.airbnb_url }}" target="_blank" rel="noopener">Read all {{ property.trust.total_reviews }} reviews on Airbnb →</a>
+      </p>
+    </div>
+
+    <div style="text-align:center; margin-bottom:48px;">
+      <h2 style="font-family:Georgia,serif; font-size:1.5rem; margin-bottom:12px;">Enjoyed by guests from around the world</h2>
+      <p style="color:var(--muted); margin-bottom:24px;">
+        Ferrari enthusiasts, families, couples, and business travelers all find their ideal Florence stay here.
+      </p>
+      <a href="/book" class="btn-primary">Book the penthouse direct</a>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:12px;">No Airbnb fees · Same host · Better price</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

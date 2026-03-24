@@ -1,10 +1,7 @@
-from fastapi import APIRouter, Depends
+"""Discovery files: sitemap, robots.txt, ai-plugin.json, agent-card.json."""
+from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse, Response
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from api.database import get_db
-from api.models import Listing, BlogArticle
-from api.config import get_settings
+from api.config import PROPERTY, BLOG_ARTICLES, get_settings
 
 router = APIRouter()
 
@@ -12,120 +9,137 @@ router = APIRouter()
 @router.get("/.well-known/ai-plugin.json")
 async def ai_plugin():
     settings = get_settings()
+    base = settings.SITE_BASE_URL
     return {
         "schema_version": "v1",
-        "name_for_human": "AgentStay",
-        "name_for_model": "agentstay",
-        "description_for_human": "Book apartments directly. No platform fees.",
+        "name_for_human": "F1 Penthouse Florence — Direct Booking",
+        "name_for_model": "f1_penthouse_booking",
+        "description_for_human": (
+            "Book a unique Ferrari-themed penthouse in central Florence directly. "
+            "No platform fees. Up to 7 guests."
+        ),
         "description_for_model": (
-            "AgentStay lets you search and book vacation apartments directly from owners. "
-            "Use search_listings to find apartments by city, dates, guests, price range, neighborhood, and amenities. "
-            "Use get_listing_details with a slug to get full info including photos, trust card ratings, pricing, and landmarks. "
-            "Use check_availability with slug, check_in (YYYY-MM-DD), check_out (YYYY-MM-DD), guests to get pricing breakdown. "
-            "Use create_booking to submit a booking request: listing_slug, check_in, check_out, guest.name, guest.email, guest.num_guests. "
-            "Use get_booking_status with booking_id to check if booking is pending_approval, approved (with payment_url), or declined. "
-            "All prices in EUR. No booking fees. Hosts confirm within 24 hours."
+            "Direct booking API for F1 Penthouse Florence — a Ferrari-themed penthouse "
+            "for up to 7 guests in central Florence, walkable to Ponte Vecchio (8 min), "
+            "Uffizi (9 min), and SMN station (7 min). 3 bedrooms, 3 bathrooms, 2 terraces, "
+            "city views. Rated 4.94/5 from 48 Airbnb reviews. "
+            "Endpoints: "
+            "GET /api/v1/property (full details), "
+            "GET /api/v1/availability?check_in=YYYY-MM-DD&check_out=YYYY-MM-DD&guests=N (pricing), "
+            "POST /api/v1/quote (total price breakdown), "
+            "POST /api/v1/reservations (create booking hold), "
+            "POST /api/v1/payments/checkout-session (Stripe payment link). "
+            "Price range €250-400/night by season. Cleaning fee €150. Min 2 nights."
         ),
         "auth": {"type": "none"},
-        "api": {
-            "type": "openapi",
-            "url": f"{settings.SITE_BASE_URL}/openapi.json"
-        },
-        "logo_url": f"{settings.SITE_BASE_URL}/static/logo.png",
-        "contact_email": "hello@agentstay.com",
-        "legal_info_url": f"{settings.SITE_BASE_URL}/legal"
+        "api": {"type": "openapi", "url": f"{base}/api/openapi.json"},
+        "logo_url": f"{base}/static/logo.png",
+        "contact_email": "info@f1penthouse.com",
     }
 
 
 @router.get("/.well-known/agent-card.json")
 async def agent_card():
     settings = get_settings()
+    base = settings.SITE_BASE_URL
     return {
         "schema_version": "v1",
-        "name": "AgentStay",
-        "description": "Direct vacation rental booking platform. Search, check availability, book apartments without platform fees.",
-        "url": settings.SITE_BASE_URL,
+        "name": "F1 Penthouse Florence",
+        "description": (
+            "Ferrari-themed penthouse for up to 7 guests in central Florence. "
+            "Direct booking, no platform fees. Rated 4.94/5 from 48 reviews."
+        ),
+        "url": base,
         "version": "1.0.0",
-        "capabilities": {
-            "streaming": False,
-            "push_notifications": False
+        "provider": {
+            "name": "F1 Penthouse Florence",
+            "email": "info@f1penthouse.com",
+            "phone": "+39 3311385266",
         },
+        "capabilities": {"streaming": False, "push_notifications": False},
         "skills": [
-            {
-                "id": "search_listings",
-                "name": "Search Listings",
-                "description": "Find apartments by city, dates, guests, price, neighborhood",
-                "tags": ["search", "listings", "apartments"]
-            },
             {
                 "id": "check_availability",
                 "name": "Check Availability",
-                "description": "Check dates availability and get price breakdown",
-                "tags": ["availability", "pricing"]
+                "description": "Check dates and get full price breakdown",
+                "tags": ["availability", "pricing", "dates"],
             },
             {
-                "id": "create_booking",
-                "name": "Create Booking",
-                "description": "Submit a booking request for an apartment",
-                "tags": ["booking", "reservation"]
+                "id": "get_quote",
+                "name": "Get Quote",
+                "description": "Get total price with all fees for specific dates",
+                "tags": ["quote", "pricing"],
             },
             {
-                "id": "get_reviews",
-                "name": "Get Reviews",
-                "description": "Access verified reviews from Airbnb, Booking.com, and Google",
-                "tags": ["reviews", "trust", "ratings"]
-            }
+                "id": "create_reservation",
+                "name": "Create Reservation",
+                "description": "Create a reservation hold for the penthouse",
+                "tags": ["booking", "reservation"],
+            },
+            {
+                "id": "get_property",
+                "name": "Get Property Details",
+                "description": "Full property data including amenities, photos, policies",
+                "tags": ["property", "details"],
+            },
         ],
         "endpoints": {
-            "listings": "/api/v1/listings",
-            "availability": "/api/v1/listings/{slug}/availability",
-            "bookings": "/api/v1/bookings",
-            "openapi": "/openapi.json",
-            "mcp": "stdio via npm package"
-        }
+            "property": "/api/v1/property",
+            "availability": "/api/v1/availability",
+            "quote": "/api/v1/quote",
+            "reservations": "/api/v1/reservations",
+            "openapi": "/api/openapi.json",
+            "mcp": "stdio via npm package (see /mcp)",
+        },
+        "property": {
+            "type": "penthouse",
+            "city": "Florence",
+            "country": "IT",
+            "guests_max": 7,
+            "bedrooms": 3,
+            "bathrooms": 3,
+            "rating": 4.94,
+            "reviews": 48,
+            "price_from": 250,
+            "currency": "EUR",
+        },
     }
 
 
 @router.get("/sitemap.xml")
-async def sitemap(db: AsyncSession = Depends(get_db)):
+async def sitemap():
     settings = get_settings()
     base = settings.SITE_BASE_URL
+    today = "2026-03-22"
 
-    listings_result = await db.execute(
-        select(Listing.slug, Listing.updated_at).where(Listing.status == "active")
-    )
-    listings = listings_result.all()
+    static_urls = [
+        ("", "1.0", "daily"),
+        ("/penthouse-florence", "0.95", "weekly"),
+        ("/availability", "0.8", "daily"),
+        ("/reviews", "0.8", "monthly"),
+        ("/location", "0.8", "monthly"),
+        ("/faq", "0.85", "monthly"),
+        ("/booking-policies", "0.7", "monthly"),
+        ("/book", "0.9", "weekly"),
+        ("/contact", "0.6", "monthly"),
+        ("/blog", "0.8", "weekly"),
+        ("/api", "0.6", "monthly"),
+        ("/mcp", "0.5", "monthly"),
+    ]
 
-    articles_result = await db.execute(
-        select(BlogArticle.slug, BlogArticle.updated_at)
-    )
-    articles = articles_result.all()
-
-    urls = [f"""  <url>
-    <loc>{base}/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>""",
-    f"""  <url>
-    <loc>{base}/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>"""]
-
-    for listing in listings:
-        lastmod = listing.updated_at.strftime("%Y-%m-%d") if listing.updated_at else "2026-01-01"
+    urls = []
+    for path, priority, freq in static_urls:
         urls.append(f"""  <url>
-    <loc>{base}/l/{listing.slug}</loc>
-    <lastmod>{lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>{base}{path}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>{freq}</changefreq>
+    <priority>{priority}</priority>
   </url>""")
 
-    for article in articles:
-        lastmod = article.updated_at.strftime("%Y-%m-%d") if article.updated_at else "2026-01-01"
+    for article in BLOG_ARTICLES:
         urls.append(f"""  <url>
-    <loc>{base}/blog/{article.slug}</loc>
-    <lastmod>{lastmod}</lastmod>
+    <loc>{base}/blog/{article["slug"]}</loc>
+    <lastmod>{article["date"]}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>""")
@@ -134,7 +148,6 @@ async def sitemap(db: AsyncSession = Depends(get_db)):
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     xml += "\n".join(urls)
     xml += "\n</urlset>"
-
     return Response(content=xml, media_type="application/xml")
 
 
@@ -147,16 +160,22 @@ Allow: /
 User-agent: GPTBot
 Allow: /
 
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: Bytespider
-Allow: /
-
-User-agent: anthropic-ai
 Allow: /
 
 User-agent: Google-Extended

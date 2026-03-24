@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Check Availability — F1 Penthouse Florence{% endblock %}
+{% block description %}Check availability and pricing for F1 Penthouse Florence. From €250/night (low season). Minimum 2 nights. Book direct — no Airbnb fees.{% endblock %}
+{% block canonical_path %}/availability{% endblock %}
+
+{% block content %}
+<div style="padding: 32px 0;">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="/">Home</a><span>›</span>
+      Check Availability
+    </nav>
+
+    <h1 class="section-title" style="margin-top:16px;">Check Availability &amp; Pricing</h1>
+    <p class="section-subtitle">Enter your dates to see if the penthouse is available and get an exact price breakdown.</p>
+
+    <!-- BOOKING FORM -->
+    <div style="display:grid; grid-template-columns:1fr 360px; gap:48px; align-items:start;">
+      <div>
+        <form id="avail-form" style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:28px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="check_in">Check-in date</label>
+              <input type="date" id="check_in" name="check_in" required>
+            </div>
+            <div class="form-group">
+              <label for="check_out">Check-out date</label>
+              <input type="date" id="check_out" name="check_out" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="guests">Number of guests</label>
+            <select id="guests" name="guests">
+              {% for i in range(1, 8) %}
+              <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} guest{{ 's' if i > 1 else '' }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn-cta">Check availability</button>
+        </form>
+
+        <!-- RESULT -->
+        <div id="result" class="price-breakdown-result" style="display:none; margin-top:24px;">
+          <div id="result-content"></div>
+        </div>
+
+        <!-- PRICING TABLE OVERVIEW -->
+        <div style="margin-top:40px;">
+          <h2 style="font-family:Georgia,serif; font-size:1.3rem; margin-bottom:16px;">Seasonal pricing</h2>
+          <div class="season-grid">
+            {% for season in property.pricing.seasons %}
+            <div class="season-card">
+              <div class="season-label">{{ season.label }}</div>
+              <div class="season-price">€{{ season.per_night }}<span style="font-size:0.85rem; color:var(--muted);">/night</span></div>
+              <div class="season-months">{{ season.months }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          <p style="color:var(--muted); font-size:0.9rem; margin-top:14px;">
+            + Cleaning fee €{{ property.pricing.cleaning_fee }} once ·
+            Weekly discount {{ property.pricing.discounts[0].percent }}% ·
+            Monthly discount {{ property.pricing.discounts[1].percent }}%
+          </p>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:6px;">
+            Italian tourist tax ~€3.50/person/night (max 7 nights), payable on arrival.
+          </p>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div style="position:sticky; top:90px;">
+        <div class="booking-cta">
+          <div class="cta-price">From €{{ property.pricing.seasons[0].per_night }}<span>/night</span></div>
+          <div class="cta-rating"><strong>★ {{ property.trust.overall }}</strong> · {{ property.trust.total_reviews }} reviews</div>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:16px;">
+            Use the form to get an exact price for your dates. Then
+            <a href="/book" style="color:var(--accent);">proceed to book</a>.
+          </p>
+          <a href="/book" class="btn-cta">Book direct now</a>
+          <p class="cta-note">✓ No Airbnb fees</p>
+          <p class="cta-meta">Min {{ property.pricing.min_nights }} nights · Max {{ property.capacity.max_guests }} guests</p>
+        </div>
+
+        <div class="sidebar-card" style="margin-top:16px;">
+          <h3>Questions about pricing?</h3>
+          <p style="color:var(--muted); font-size:0.9rem; margin-bottom:12px;">Contact the host directly.</p>
+          <a href="mailto:{{ property.host.email }}" style="color:var(--accent); text-decoration:none; font-size:0.9rem;">{{ property.host.email }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('avail-form');
+const result = document.getElementById('result');
+const resultContent = document.getElementById('result-content');
+
+// Pre-fill from URL params
+const params = new URLSearchParams(location.search);
+if (params.get('check_in')) document.getElementById('check_in').value = params.get('check_in');
+if (params.get('check_out')) document.getElementById('check_out').value = params.get('check_out');
+if (params.get('guests')) document.getElementById('guests').value = params.get('guests');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const ci = document.getElementById('check_in').value;
+  const co = document.getElementById('check_out').value;
+  const g = document.getElementById('guests').value;
+
+  resultContent.innerHTML = '<p style="color:var(--muted);">Checking availability…</p>';
+  result.style.display = 'block';
+
+  try {
+    const res = await fetch(`/api/v1/availability?check_in=${ci}&check_out=${co}&guests=${g}`);
+    const data = await res.json();
+
+    if (!data.available) {
+      resultContent.innerHTML = `
+        <div style="background:#fff3f0; border:1px solid #ffcccc; border-radius:6px; padding:16px;">
+          <strong style="color:var(--accent);">Not available</strong>
+          <p style="color:var(--muted); margin-top:6px;">${data.reason}</p>
+        </div>`;
+      return;
+    }
+
+    const bd = data.price_breakdown;
+    resultContent.innerHTML = `
+      <div style="background:#f0fff4; border:1px solid #b2f5c8; border-radius:6px; padding:16px; margin-bottom:16px;">
+        <strong style="color:var(--success);">✓ Available for ${data.nights} nights</strong>
+      </div>
+      <table class="pricing-table">
+        <tr><td>Accommodation (${data.nights} nights × €${bd.nightly_avg}/avg)</td><td>€${bd.accommodation}</td></tr>
+        ${bd.discount_amount ? `<tr><td>${bd.discount_label}</td><td style="color:var(--success);">−€${Math.abs(bd.discount_amount)}</td></tr>` : ''}
+        <tr><td>Cleaning fee</td><td>€${bd.cleaning_fee}</td></tr>
+        <tr><td>City tourist tax (est.)</td><td>€${bd.city_tax}</td></tr>
+        <tr class="total"><td><strong>Total</strong></td><td><strong>€${bd.total}</strong></td></tr>
+      </table>
+      <p style="color:var(--muted); font-size:0.82rem; margin-top:8px;">${bd.city_tax_note}</p>
+      <a href="/book?check_in=${ci}&check_out=${co}&guests=${g}" class="btn-cta" style="margin-top:16px; display:block; text-align:center; text-decoration:none;">Book these dates →</a>`;
+  } catch (err) {
+    resultContent.innerHTML = '<p style="color:var(--accent);">Could not check availability. Please try again or contact the host.</p>';
+  }
+});
+
+// Auto-submit if URL has dates
+if (params.get('check_in') && params.get('check_out')) {
+  form.dispatchEvent(new Event('submit'));
+}
+</script>
+{% endblock %}
