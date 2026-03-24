@@ -69,7 +69,7 @@ ARTICLE_1_CONTENT = """<p>Florence's historic center is remarkably compact — y
 <h2>Which neighborhood is right for you?</h2>
 <p>Choose <strong>Centro Storico</strong> if this is your first visit and you want to be within steps of the Duomo and Uffizi. Choose <strong>Oltrarno</strong> if you've been before and want an authentic local neighborhood with artisan workshops and wine bars. Choose <strong>Santa Croce</strong> if you're traveling with family or staying 5+ nights and want space, a market nearby, and room to breathe. Choose <strong>San Lorenzo</strong> if you're on a tighter budget but still want central location. Choose <strong>Santa Maria Novella</strong> if easy train/airport access is your priority.</p>
 
-<p>Whichever neighborhood you choose, booking directly through AgentStay saves you 15–20% compared to Airbnb platform fees — and you get direct contact with your host.</p>"""
+<p>Whichever neighborhood you choose, booking directly directly at f1penthouse.com saves you 15–20% compared to Airbnb platform fees — and you get direct contact with your host.</p>"""
 
 ARTICLE_1_FAQ = [
     {
@@ -86,7 +86,7 @@ ARTICLE_1_FAQ = [
     },
     {
         "question": "Can I book a Florence apartment directly without Airbnb?",
-        "answer": "Yes — and you'll typically save 15–20% on service fees. Many quality apartments in Florence offer direct booking through platforms like AgentStay, with the same cancellation protection. Look for properties with verified reviews from multiple platforms (Airbnb, Booking.com, Google) to ensure quality."
+        "answer": "Yes — and you'll typically save 15–20% on service fees. Many quality apartments in Florence offer direct booking through f1penthouse.com, with the same cancellation protection. Look for properties with verified reviews from multiple platforms (Airbnb, Booking.com, Google) to ensure quality."
     },
     {
         "question": "What is the best time to visit Florence?",
@@ -152,11 +152,11 @@ ARTICLE_2_CONTENT = """<p>Is it cheaper to rent an apartment or stay in a hotel 
 ARTICLE_2_FAQ = [
     {
         "question": "How much does a Florence apartment cost for a week?",
-        "answer": "A quality 2-bedroom apartment in Centro Storico costs €150/night in shoulder season. For 7 nights: €1,050 nightly + €80 cleaning fee = €1,130, minus 10% weekly discount = approximately €1,025 total. Many apartments on AgentStay offer automatic 7-night discounts."
+        "answer": "A quality 2-bedroom apartment in Centro Storico costs €150/night in shoulder season. For 7 nights: €1,050 nightly + €80 cleaning fee = €1,130, minus 10% weekly discount = approximately €1,025 total. Many apartments at f1penthouse.com offer automatic 7-night discounts."
     },
     {
         "question": "What are Airbnb service fees in Florence?",
-        "answer": "Airbnb charges guests a service fee of 14–17% on top of the nightly rate. On a €1,000 booking, expect to pay €140–170 extra. Booking directly through platforms like AgentStay eliminates this fee entirely."
+        "answer": "Airbnb charges guests a service fee of 14–17% on top of the nightly rate. On a €1,000 booking, expect to pay €140–170 extra. Booking directly through f1penthouse.com eliminates this fee entirely."
     },
     {
         "question": "Is Florence safe for tourists?",
@@ -164,7 +164,7 @@ ARTICLE_2_FAQ = [
     },
     {
         "question": "Can I find a last-minute apartment in Florence?",
-        "answer": "Last-minute availability in Florence is possible, especially in low season (November–February). However, for July–August peak season, book at least 2–3 months ahead. On AgentStay you can check real-time availability for any dates."
+        "answer": "Last-minute availability in Florence is possible, especially in low season (November–February). However, for July–August peak season, book at least 2–3 months ahead. At f1penthouse.com you can check real-time availability for any dates."
     }
 ]
 

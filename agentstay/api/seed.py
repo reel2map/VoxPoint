@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Seed the AgentStay database with demo listings, host, and blog articles."""
+"""Seed script (legacy)."""
 import asyncio
 import sys
 import os
