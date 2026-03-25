@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}F1 Penthouse Florence — Ferrari-Themed Penthouse, 7 Guests, Book Direct{% endblock %}
-{% block description %}Ferrari-themed penthouse in central Florence for up to 7 guests. 3 bedrooms, 3 bathrooms, 2 terraces. Walk to Ponte Vecchio (8 min), Uffizi (9 min). Rated 4.94/5 from 48 reviews. Book direct — no platform fees.{% endblock %}
+{% block title %}La Corsa Suite Firenze — Private Penthouse, Book Direct{% endblock %}
+{% block description %}La Corsa Suite Firenze — private cultural residence at Via dei Federighi 1, Florence. Three bedrooms, two terraces, F1 heritage as cultural undertone. Rated 4.94/5. Book direct.{% endblock %}
 {% block canonical_path %}/{% endblock %}
 
 {% block ld_json %}
@@ -9,7 +9,7 @@
 {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
-  "name": "F1 Penthouse Florence",
+  "name": "La Corsa Suite Firenze",
   "url": "{{ base_url }}",
   "image": "{{ property.photos[0].url }}",
   "description": "{{ property.tagline }}",
@@ -38,218 +38,263 @@
 
 {% block content %}
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container hero-inner">
-    <div class="hero-badge">Ferrari-Themed Penthouse &nbsp;·&nbsp; Florence, Italy</div>
-    <h1>Stay like a <em>champion</em><br>in the heart of Florence</h1>
-    <p>{{ property.subtitle }}</p>
-
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="num">{{ property.trust.overall }}</span>
-        <span class="lbl">Rating ({{ property.trust.total_reviews }} reviews)</span>
-      </div>
-      <div class="hero-stat">
-        <span class="num">{{ property.capacity.max_guests }}</span>
-        <span class="lbl">Guests max</span>
-      </div>
-      <div class="hero-stat">
-        <span class="num">{{ property.capacity.bedrooms }}</span>
-        <span class="lbl">Bedrooms</span>
-      </div>
-      <div class="hero-stat">
-        <span class="num">2</span>
-        <span class="lbl">Terraces</span>
-      </div>
+<!-- ══════════════════════════════════════════
+     HERO — full viewport, dark, minimal
+     ══════════════════════════════════════════ -->
+<section class="hero-full">
+  <div class="hero-bg" style="background-image: url('{{ property.photos[0].url }}');"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Via dei Federighi 1 &nbsp;·&nbsp; Firenze, Italia</p>
+    <h1 class="hero-title">La Corsa<br><em>Suite Firenze</em></h1>
+    <p class="hero-sub">Una residenza privata. Tre camere, due terrazze,<br>il patrimonio della velocità come contesto culturale.</p>
+    <div class="hero-actions">
+      <a href="/book" class="btn-hero-primary">Prenota direct</a>
+      <a href="/penthouse-florence" class="btn-hero-ghost">Scopri la suite →</a>
     </div>
-
-    <div class="hero-cta">
-      <a href="/book" class="btn-primary">Check availability &amp; book direct</a>
-      <a href="/penthouse-florence" class="btn-outline">Explore the penthouse →</a>
-    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span></span>
   </div>
 </section>
 
-<!-- QUICK BOOKING WIDGET -->
-<section style="background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 24px 0;">
+<!-- ══════════════════════════════════════════
+     BOOKING STRIP
+     ══════════════════════════════════════════ -->
+<section class="booking-strip">
   <div class="container">
-    <form class="booking-widget" action="/availability" method="get">
-      <div class="search-field">
+    <form class="booking-row" action="/availability" method="get">
+      <div class="bfield">
         <label>Check-in</label>
         <input type="date" name="check_in" required>
       </div>
-      <div class="search-field">
+      <div class="bfield">
         <label>Check-out</label>
         <input type="date" name="check_out" required>
       </div>
-      <div class="search-field" style="max-width:120px;">
-        <label>Guests</label>
+      <div class="bfield bfield-sm">
+        <label>Ospiti</label>
         <select name="guests">
           {% for i in range(1, 8) %}
-          <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} guest{{ 's' if i > 1 else '' }}</option>
+          <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }}{% if i == 1 %} ospite{% else %} ospiti{% endif %}</option>
           {% endfor %}
         </select>
       </div>
-      <button type="submit" class="btn-search">Check availability</button>
+      <button type="submit" class="btn-search">Verifica disponibilità</button>
     </form>
-    <p style="font-size:0.82rem; color:var(--muted); margin-top:10px;">
-      Book direct — no Airbnb fees. From €{{ property.pricing.seasons[0].per_night }}/night (low season).
-    </p>
+    <p class="booking-note">Prenotazione diretta — senza commissioni Airbnb. Da €{{ property.pricing.seasons[0].per_night }}/notte.</p>
   </div>
 </section>
 
-<!-- PHOTOS STRIP -->
-<section style="padding: 40px 0; background: var(--bg);">
+<!-- ══════════════════════════════════════════
+     LA SUITE — editorial intro
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-light">
   <div class="container">
-    <div class="photo-grid">
-      {% for photo in property.photos[:8] %}
+    <div class="editorial-grid editorial-img-right">
+      <div class="editorial-text">
+        <p class="editorial-label">La Suite</p>
+        <h2 class="editorial-heading">Un'esperienza,<br>non solo un alloggio</h2>
+        <p class="editorial-body">{{ property.subtitle }}</p>
+        <ul class="suite-facts">
+          <li><span class="fact-num">{{ property.capacity.max_guests }}</span><span class="fact-lbl">Ospiti</span></li>
+          <li><span class="fact-num">{{ property.capacity.bedrooms }}</span><span class="fact-lbl">Camere</span></li>
+          <li><span class="fact-num">2</span><span class="fact-lbl">Terrazze</span></li>
+          <li><span class="fact-num">{{ property.trust.overall }}</span><span class="fact-lbl">Rating</span></li>
+        </ul>
+        <a href="/penthouse-florence" class="editorial-link">Esplora la suite →</a>
+      </div>
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap">
+          <img src="{{ property.photos[1].url }}" alt="{{ property.photos[1].alt }}" loading="lazy">
+        </div>
+        <div class="editorial-img-secondary">
+          <img src="{{ property.photos[3].url }}" alt="{{ property.photos[3].alt }}" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PHOTO MOSAIC
+     ══════════════════════════════════════════ -->
+<section class="mosaic-section">
+  <div class="mosaic-grid">
+    {% for photo in property.photos[1:7] %}
+    <div class="mosaic-item mosaic-{{ loop.index }}">
       <img src="{{ photo.url }}" alt="{{ photo.alt }}" loading="lazy">
-      {% endfor %}
     </div>
-    <p style="text-align:right; margin-top:10px;">
-      <a href="/penthouse-florence" style="color:var(--accent); text-decoration:none; font-size:0.9rem;">View all photos →</a>
-    </p>
+    {% endfor %}
+  </div>
+  <div class="container mosaic-cta">
+    <a href="/penthouse-florence" class="editorial-link-sm">Tutte le foto →</a>
   </div>
 </section>
 
-<!-- KEY FEATURES -->
-<section style="padding: 56px 0;">
+<!-- ══════════════════════════════════════════
+     LA CORSA — F1 section (dark)
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-dark" id="la-corsa">
   <div class="container">
-    <h2 class="section-title">Everything you need — and nothing you'd expect</h2>
-    <p class="section-subtitle">A genuine one-of-a-kind stay in one of the world's great cities.</p>
-
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>Ferrari-Themed Interior</h3>
-        <p>Authentic memorabilia, racing livery details, and design done with real taste — not kitsch.</p>
+    <div class="editorial-grid editorial-img-left">
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap editorial-img-tall">
+          <img src="{{ property.photos[6].url }}" alt="F1 heritage" loading="lazy">
+        </div>
       </div>
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>Two Terraces, City Views</h3>
-        <p>Wake up to rooftop Florence. Dine outside under the Tuscan sky. Two private terraces.</p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>Walk to Everything</h3>
-        <p>Ponte Vecchio 8 min, Uffizi 9 min, SMN station 7 min. A truly central location.</p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>Sleeps 7 Comfortably</h3>
-        <p>3 bedrooms, 8 beds, 3 full bathrooms. Plenty of space for families and groups.</p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>Book Direct, Save Fees</h3>
-        <p>No 15-20% Airbnb surcharge. Same property, same host, lower total price.</p>
-      </div>
-      <div class="feature-card">
-        <div class="icon">◈</div>
-        <h3>4.94 / 5 Rating</h3>
-        <p>{{ property.trust.total_reviews }} verified reviews. Communication, location, and check-in all rated 5.0.</p>
+      <div class="editorial-text">
+        <p class="editorial-label editorial-label-red">La Corsa</p>
+        <h2 class="editorial-heading">La velocità<br>come cultura</h2>
+        <p class="editorial-body">F1 non è decorazione — è contesto. L'estetica della disciplina, della concentrazione, della precisione assoluta. Archivio visivo, texture di metallo e gomma, lo sguardo del pilota nel momento prima dello scatto.</p>
+        <p class="editorial-body">Non caos. Non rumore. <em>Controllo.</em></p>
+        <div class="corsa-detail">
+          <span class="corsa-line"></span>
+          <span class="corsa-caption">Ferrari. Velocità. Firenze.</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LOCATION LANDMARKS -->
-<section style="padding: 56px 0; background: var(--card-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<!-- ══════════════════════════════════════════
+     FIRENZE — city section (warm light)
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-warm" id="firenze">
   <div class="container">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;">
-      <div>
-        <h2 class="section-title">Florence at your doorstep</h2>
-        <p class="section-subtitle">Via dei Federighi 1, Centro Storico — one of the best addresses in the city.</p>
+    <div class="editorial-grid editorial-img-right">
+      <div class="editorial-text">
+        <p class="editorial-label">Firenze</p>
+        <h2 class="editorial-heading">La città come<br>contesto culturale</h2>
+        <p class="editorial-body">Firenze non è uno sfondo turistico — è la continuazione dell'estetica dello spazio. Frammenti architettonici, strade strette, la luce calda del tramonto, scultura oltre il vetro.</p>
         <ul class="landmark-list">
           {% for lm in property.landmarks %}
           <li>
-            <span>{{ lm.name }}</span>
-            <span class="mins">{{ lm.walk_minutes }} min walk</span>
+            <span class="lm-name">{{ lm.name }}</span>
+            <span class="lm-min">{{ lm.walk_minutes }} min</span>
           </li>
           {% endfor %}
         </ul>
-        <p style="margin-top:20px;">
-          <a href="/location" class="btn-primary">See map &amp; neighborhood guide</a>
-        </p>
+        <a href="/location" class="editorial-link">Esplora la posizione →</a>
       </div>
-      <div>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2880.7!2d11.2489!3d43.7712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDQ2JzE2LjMiTiAxMcKwMTQnNTYuMSJF!5e0!3m2!1sen!2sit!4v1"
-          width="100%" height="300" style="border:0; border-radius:var(--radius);" allowfullscreen="" loading="lazy">
-        </iframe>
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap">
+          <img src="{{ property.photos[9].url }}" alt="Florence neighbourhood" loading="lazy">
+        </div>
+        <div class="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2880.7!2d11.2489!3d43.7712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDQ2JzE2LjMiTiAxMcKwMTQnNTYuMSJF!5e0!3m2!1sen!2sit!4v1"
+            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- REVIEWS -->
-<section style="padding: 56px 0;">
+<!-- ══════════════════════════════════════════
+     IL SERVIZIO — concierge section
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-mid" id="servizio">
   <div class="container">
-    <h2 class="section-title">What guests say</h2>
-    <div style="display:flex; align-items:center; gap:16px; margin-bottom:28px;">
-      <div style="font-family:Georgia,serif; font-size:3.5rem; font-weight:700; line-height:1;">{{ property.trust.overall }}</div>
-      <div>
-        <div style="color:var(--gold); font-size:1.3rem;">★★★★★</div>
-        <div style="color:var(--muted); font-size:0.9rem;">{{ property.trust.total_reviews }} reviews on Airbnb</div>
+    <div class="servizio-header">
+      <p class="editorial-label">Il Servizio</p>
+      <h2 class="editorial-heading editorial-heading-center">Cura come artigianato</h2>
+      <p class="editorial-body editorial-body-center">Non assistenza generica. Attenzione ai dettagli — un gesto discreto, una porta aperta al momento giusto, la conoscenza profonda della città.</p>
+    </div>
+    <div class="servizio-grid">
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Check-in personale</h3>
+        <p>L'host vi accoglie in persona. Nessun codice, nessuna serratura digitale. Un'accoglienza reale.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Raccomandazioni curate</h3>
+        <p>Ristoranti, botteghe, cantine — non guide turistiche, ma luoghi che conoscono i residenti.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Flessibilità</h3>
+        <p>Orari, transfer, esigenze particolari. La prenotazione diretta permette un servizio su misura.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Risposta diretta</h3>
+        <p>Nessun intermediario. Chiamate o scrivete — risposta nelle ore, non nei giorni.</p>
       </div>
     </div>
-    <p class="trust-summary" style="margin-bottom:32px;">{{ property.trust.summary }}</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px;">
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     REVIEWS — testimonials
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-light">
+  <div class="container">
+    <div class="reviews-header">
+      <p class="editorial-label">Recensioni</p>
+      <h2 class="editorial-heading">{{ property.trust.overall }}<em>/5</em></h2>
+      <p class="reviews-count">{{ property.trust.total_reviews }} recensioni verificate &middot; Airbnb</p>
+    </div>
+    <div class="reviews-grid">
       {% for review in property.trust.reviews %}
-      <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
-        <div style="color:var(--gold); margin-bottom:8px;">{% for _ in range(review.rating) %}★{% endfor %}</div>
-        <p style="color:var(--muted); font-size:0.95rem; margin-bottom:12px; font-style:italic;">"{{ review.text }}"</p>
-        <div style="font-weight:600; font-size:0.9rem;">{{ review.author }}</div>
-        <div style="color:var(--muted); font-size:0.82rem;">{{ review.source }} · {{ review.date }}</div>
+      <div class="review-card">
+        <p class="review-text">"{{ review.text }}"</p>
+        <div class="review-meta">
+          <span class="review-author">{{ review.author }}</span>
+          <span class="review-date">{{ review.date }}</span>
+        </div>
       </div>
       {% endfor %}
     </div>
-    <p style="margin-top:24px; text-align:center;">
-      <a href="/reviews" style="color:var(--accent); text-decoration:none;">Read all {{ property.trust.total_reviews }} reviews →</a>
+    <p class="reviews-link-wrap">
+      <a href="/reviews" class="editorial-link">Tutte le recensioni →</a>
     </p>
   </div>
 </section>
 
-<!-- PRICING OVERVIEW -->
-<section style="padding: 56px 0; background: var(--card-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<!-- ══════════════════════════════════════════
+     PRICING — transparent
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-dark pricing-section">
   <div class="container">
-    <h2 class="section-title">Transparent pricing</h2>
-    <p class="section-subtitle">No hidden fees. No platform markup. What you see is what you pay.</p>
-    <div class="season-grid">
+    <p class="editorial-label editorial-label-subtle">Prezzi</p>
+    <h2 class="editorial-heading">Trasparenza totale.<br>Nessun sovrapprezzo.</h2>
+    <p class="editorial-body">Prenotate direttamente e risparmiate le commissioni di piattaforma (15–20%). Stesso appartamento, stesso host, prezzo reale.</p>
+    <div class="pricing-grid">
       {% for season in property.pricing.seasons %}
-      <div class="season-card">
-        <div class="season-label">{{ season.label }}</div>
-        <div class="season-price">€{{ season.per_night }}<span style="font-size:0.85rem; color:var(--muted);">/night</span></div>
-        <div class="season-months">{{ season.months }}</div>
+      <div class="price-card">
+        <div class="price-season">{{ season.label }}</div>
+        <div class="price-amount">€{{ season.per_night }}<span>/notte</span></div>
+        <div class="price-months">{{ season.months }}</div>
       </div>
       {% endfor %}
     </div>
-    <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;">
-      + Cleaning fee €{{ property.pricing.cleaning_fee }} (once) · Min {{ property.pricing.min_nights }} nights ·
-      Weekly discount {{ property.pricing.discounts[0].percent }}% · Monthly {{ property.pricing.discounts[1].percent }}%
-    </p>
-    <p style="margin-top:20px;">
-      <a href="/availability" class="btn-primary">Get exact price for your dates</a>
-    </p>
+    <p class="pricing-note">+ Pulizie €{{ property.pricing.cleaning_fee }} · Min {{ property.pricing.min_nights }} notti · Sconto settimanale {{ property.pricing.discounts[0].percent }}%</p>
+    <a href="/availability" class="btn-hero-primary" style="margin-top:32px; display:inline-block;">Verifica il prezzo per le tue date</a>
   </div>
 </section>
 
-<!-- BLOG -->
+<!-- ══════════════════════════════════════════
+     BLOG / EDITORIALE
+     ══════════════════════════════════════════ -->
 {% if articles %}
-<section style="padding: 56px 0;">
+<section class="editorial-section editorial-warm">
   <div class="container">
-    <h2 class="section-title">Florence travel guides</h2>
-    <p class="section-subtitle">Plan your stay with our neighbourhood-by-neighbourhood guides.</p>
-    <div class="blog-grid">
+    <p class="editorial-label">Editoriale</p>
+    <h2 class="editorial-heading">Firenze — guide e prospettive</h2>
+    <div class="blog-editorial-grid">
       {% for article in articles %}
-      <div class="blog-card">
-        <div class="blog-card-body">
-          <div class="blog-tag">Florence Guide</div>
-          <h3 class="blog-card-title"><a href="/blog/{{ article.slug }}">{{ article.title }}</a></h3>
-          <div class="blog-card-meta">{{ article.date_display }} · {{ article.read_minutes }} min read</div>
-          <p class="blog-card-desc">{{ article.excerpt }}</p>
-          <a href="/blog/{{ article.slug }}" class="read-more">Read guide →</a>
+      <div class="blog-editorial-card">
+        <div class="blog-editorial-img">
+          <img src="{{ article.hero_image }}" alt="{{ article.title }}" loading="lazy">
+        </div>
+        <div class="blog-editorial-body">
+          <p class="blog-tag">{{ article.read_minutes }} min</p>
+          <h3 class="blog-editorial-title"><a href="/blog/{{ article.slug }}">{{ article.title }}</a></h3>
+          <p class="blog-editorial-excerpt">{{ article.excerpt }}</p>
+          <a href="/blog/{{ article.slug }}" class="editorial-link-sm">Leggi →</a>
         </div>
       </div>
       {% endfor %}
@@ -258,46 +303,23 @@
 </section>
 {% endif %}
 
-<!-- AI SECTION -->
-<section class="ai-section">
-  <div class="container">
-    <h2>Built for AI agents &amp; direct bookings</h2>
-    <p>F1 Penthouse Florence is fully machine-readable. AI travel agents (ChatGPT, Claude, Perplexity) can query availability, get pricing, and create reservation holds via our API — no scraping required.</p>
-    <div class="ai-grid">
-      <div class="ai-card">
-        <h3>REST API</h3>
-        <p>Full JSON API. Check availability, get quotes, create reservations.</p>
-        <code>GET /api/v1/availability</code>
-      </div>
-      <div class="ai-card">
-        <h3>MCP Server</h3>
-        <p>Model Context Protocol server for Claude Desktop and compatible agents.</p>
-        <code>/mcp</code>
-      </div>
-      <div class="ai-card">
-        <h3>OpenAPI Spec</h3>
-        <p>Machine-readable spec at <code>/api/openapi.json</code>. Import into any AI tool.</p>
-        <code>/docs</code>
-      </div>
+<!-- ══════════════════════════════════════════
+     CTA FINALE
+     ══════════════════════════════════════════ -->
+<section class="cta-final">
+  <div class="cta-final-bg"></div>
+  <div class="container cta-final-inner">
+    <p class="editorial-label editorial-label-subtle">Prenotazione</p>
+    <h2 class="cta-final-heading">Pronti per Firenze?</h2>
+    <p class="cta-final-sub">Prenotate La Corsa Suite direttamente — senza intermediari, senza sorprese.</p>
+    <div class="cta-final-actions">
+      <a href="/book" class="btn-hero-primary">Prenota la suite</a>
+      <a href="/contact" class="btn-hero-ghost">Contatta l'host →</a>
     </div>
-    <div class="ai-links">
-      <a href="/api">API landing page</a>
-      <a href="/mcp">MCP server docs</a>
-      <a href="/docs">Interactive API docs</a>
-      <a href="/api/openapi.json">OpenAPI JSON</a>
-    </div>
-  </div>
-</section>
-
-<!-- BOOK CTA -->
-<section style="padding: 64px 0; text-align:center;">
-  <div class="container">
-    <h2 style="font-family:Georgia,serif; font-size:2rem; margin-bottom:12px;">Ready to book?</h2>
-    <p style="color:var(--muted); margin-bottom:28px;">Book direct and skip the Airbnb fees. Same penthouse, same host, better price.</p>
-    <a href="/book" class="btn-primary" style="font-size:1.1rem; padding:15px 36px;">Book the F1 Penthouse</a>
-    <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;">
-      Questions? <a href="/contact" style="color:var(--accent);">Contact the host</a> or
-      <a href="tel:+393311385266" style="color:var(--accent);">call +39 331 138 5266</a>
+    <p class="cta-final-contact">
+      <a href="tel:+393311385266">+39 331 138 5266</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:pent.house.f1.florence@gmail.com">pent.house.f1.florence@gmail.com</a>
     </p>
   </div>
 </section>

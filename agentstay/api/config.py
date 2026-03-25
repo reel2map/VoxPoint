@@ -22,12 +22,12 @@ def get_settings() -> Settings:
 
 # ── Property data ─────────────────────────────────────────────────────────────
 PROPERTY: dict[str, Any] = {
-    "id": "f1-penthouse-florence",
-    "name": "F1 Penthouse Florence",
-    "tagline": "Ferrari-Themed Penthouse in Central Florence for Up to 7 Guests",
+    "id": "la-corsa-suite-firenze",
+    "name": "La Corsa Suite Firenze",
+    "tagline": "Private Cultural Residence in the Heart of Florence — Up to 7 Guests",
     "subtitle": (
-        "A one-of-a-kind stay near Ponte Vecchio and the Uffizi, "
-        "with two terraces, city views, premium amenities, and direct booking."
+        "An architectural experience near Ponte Vecchio and the Uffizi. "
+        "Three bedrooms, two terraces, the spirit of F1 — as a cultural undertone."
     ),
     "type": "entire_penthouse",
     "url": "https://f1penthouse.com",
@@ -49,7 +49,7 @@ PROPERTY: dict[str, Any] = {
     },
     "host": {
         "name": "Host",
-        "email": "info@f1penthouse.com",
+        "email": "pent.house.f1.florence@gmail.com",
         "phone": "+39 3311385266",
         "languages": ["en", "it", "ru"],
         "cin": "[CIN number]",
