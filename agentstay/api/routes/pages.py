@@ -1,8 +1,9 @@
-"""HTML page routes for F1 Penthouse Florence."""
+"""HTML page routes for La Corsa Suite Firenze."""
+import re
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from api.config import PROPERTY, BLOG_ARTICLES, get_settings
+from api.config import PROPERTY, BLOG_ARTICLES, DEMO_LISTINGS, get_settings
 
 router = APIRouter()
 templates = Jinja2Templates(directory="api/templates")
@@ -25,6 +26,47 @@ def get_article(slug: str) -> dict:
         if a["slug"] == slug:
             return a
     return None
+
+
+def render_listing_card(listing: dict) -> str:
+    featured_badge = (
+        '<span class="lc-badge">Featured</span>' if listing.get("is_featured") else ""
+    )
+    return f"""<div class="listing-card">
+  {featured_badge}
+  <div class="lc-photo">
+    <img src="{listing['photo']}" alt="{listing['name']}" loading="lazy">
+  </div>
+  <div class="lc-body">
+    <div class="lc-neighborhood">{listing['neighborhood_label']}</div>
+    <h3 class="lc-name">{listing['name']}</h3>
+    <p class="lc-tagline">{listing['tagline']}</p>
+    <div class="lc-meta">
+      <span class="lc-rating">★ {listing['rating']}</span>
+      <span class="lc-reviews">({listing['reviews']} reviews)</span>
+      <span class="lc-sep">·</span>
+      <span class="lc-capacity">{listing['bedrooms']} bed · {listing['guests']} guests</span>
+    </div>
+    <p class="lc-highlight">{listing['highlight']}</p>
+    <div class="lc-footer">
+      <div class="lc-price">From <strong>€{listing['price_from']}</strong>/night</div>
+      <a href="{listing['book_url']}" class="lc-btn">Check availability</a>
+    </div>
+  </div>
+</div>"""
+
+
+def inject_listing_cards(html: str) -> str:
+    """Replace <!-- LISTINGS:neighborhood=X --> markers with rendered cards."""
+    def replace_marker(m: re.Match) -> str:
+        neighborhood = m.group(1)
+        matches = [l for l in DEMO_LISTINGS if l["neighborhood"] == neighborhood]
+        if not matches:
+            return ""
+        cards = "".join(render_listing_card(l) for l in matches)
+        return f'<div class="listing-cards-grid">{cards}</div>'
+
+    return re.sub(r"<!-- LISTINGS:neighborhood=([\w-]+) -->", replace_marker, html)
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -94,7 +136,12 @@ async def blog_article(slug: str, request: Request):
         raise HTTPException(status_code=404, detail="Article not found")
     from api.blog_content import BLOG_CONTENT
     content_html = BLOG_CONTENT.get(article["content_key"], "<p>Content coming soon.</p>")
+    content_html = inject_listing_cards(content_html)
+    # Build FAQPage schema if article has FAQs embedded
+    faq_schema = ""
     return templates.TemplateResponse("blog/article.html", ctx(request, {
         "article": article,
         "content_html": content_html,
+        "faq_schema": faq_schema,
+        "related_articles": [a for a in BLOG_ARTICLES if a["slug"] != article["slug"]][:3],
     }))

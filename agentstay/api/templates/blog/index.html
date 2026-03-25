@@ -1,47 +1,50 @@
 {% extends "base.html" %}
 
-{% block title %}Florence Travel Guides — F1 Penthouse Blog{% endblock %}
-{% block description %}Expert Florence travel guides: best neighborhoods, apartment vs hotel costs, booking tips. From the team behind F1 Penthouse Florence.{% endblock %}
+{% block title %}Florence Travel Guides — La Corsa Suite Blog{% endblock %}
+{% block description %}Florence guides: best neighborhoods, top restaurants, concierge services, apartment vs hotel. From the team behind La Corsa Suite Firenze.{% endblock %}
 {% block canonical_path %}/blog{% endblock %}
 
 {% block content %}
-<section style="padding: 48px 0;">
+<div style="padding: 120px 0 56px; background: var(--cream);">
   <div class="container">
     <nav class="breadcrumbs">
-      <a href="/">Home</a>
-      <span>›</span>
-      Blog
+      <a href="/">Home</a><span>›</span> Blog
     </nav>
+    <p class="editorial-label" style="margin-top: 16px;">Editorial</p>
+    <h1 class="editorial-heading">Florence — guides &amp; perspectives</h1>
+    <p class="editorial-body">Practical guides, local recommendations, and cultural context for your Florence stay.</p>
+  </div>
+</div>
 
-    <h1 class="section-title" style="margin-top:16px;">Florence Travel Guides</h1>
-    <p class="section-subtitle">Expert advice on neighborhoods, budgeting, and making the most of your Florence visit.</p>
-
-    <div class="blog-grid">
-      {% for article in articles %}
-      <div class="blog-card">
-        <div class="blog-card-body">
-          <div class="blog-tag">Florence Guide</div>
-          <h2 class="blog-card-title"><a href="/blog/{{ article.slug }}">{{ article.title }}</a></h2>
-          <div class="blog-card-meta">F1 Penthouse · {{ article.date_display }} · {{ article.read_minutes }} min read</div>
-          {% if article.excerpt %}
-          <p class="blog-card-desc">{{ article.excerpt }}</p>
-          {% elif article.meta_description %}
-          <p class="blog-card-desc">{{ article.meta_description }}</p>
-          {% endif %}
-          <a href="/blog/{{ article.slug }}" class="read-more">Read guide →</a>
+<div class="container" style="padding-bottom: 80px;">
+  <div class="blog-editorial-grid" style="margin-top: 0;">
+    {% for article in articles %}
+    <div class="blog-editorial-card">
+      <div class="blog-editorial-img">
+        <a href="/blog/{{ article.slug }}">
+          <img src="{{ article.hero_image }}" alt="{{ article.title }}" loading="lazy">
+        </a>
+      </div>
+      <div class="blog-editorial-body">
+        <p class="blog-tag">{{ article.read_minutes }} min read</p>
+        <h2 class="blog-editorial-title"><a href="/blog/{{ article.slug }}">{{ article.title }}</a></h2>
+        <p class="blog-editorial-excerpt">{{ article.excerpt }}</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+          <span style="font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.06em;">{{ article.date_display }}</span>
+          <a href="/blog/{{ article.slug }}" class="editorial-link-sm">Read →</a>
         </div>
       </div>
-      {% endfor %}
     </div>
+    {% endfor %}
   </div>
-</section>
+</div>
 
-<!-- CTA -->
-<section style="padding: 48px 0; background: var(--card-bg); border-top: 1px solid var(--border);">
-  <div class="container" style="text-align:center;">
-    <h2 style="font-family:Georgia,serif; font-size:1.6rem; margin-bottom:8px;">Planning a trip to Florence?</h2>
-    <p style="color:var(--muted); margin-bottom:20px;">Book the F1 Penthouse — rated 4.94/5, no platform fees, walks to everything.</p>
-    <a href="/book" class="btn-primary">Check availability</a>
+<section class="editorial-section editorial-dark" style="padding: 64px 0;">
+  <div class="container" style="text-align: center;">
+    <p class="editorial-label editorial-label-subtle">La Corsa Suite Firenze</p>
+    <h2 class="editorial-heading">Planning a trip to Florence?</h2>
+    <p class="editorial-body editorial-body-center">Rated 4.94/5 · 3 bedrooms · 2 terraces · No Airbnb fees</p>
+    <a href="/book" class="btn-hero-primary" style="margin-top: 16px; display: inline-block;">Check availability</a>
   </div>
 </section>
 {% endblock %}

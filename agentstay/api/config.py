@@ -400,7 +400,84 @@ PROPERTY: dict[str, Any] = {
         },
     ],
     "airbnb_url": "https://www.airbnb.it/rooms/813661997448757341",
+    "neighborhood": "centro-storico",
 }
+
+# ── Demo listings (neighbourhood catalogue for blog cards) ────────────────────
+DEMO_LISTINGS: list[dict] = [
+    {
+        "id": "la-corsa-suite-firenze",
+        "name": "La Corsa Suite Firenze",
+        "neighborhood": "centro-storico",
+        "neighborhood_label": "Centro Storico",
+        "tagline": "Ferrari heritage penthouse · 2 terraces · views",
+        "guests": 7,
+        "bedrooms": 3,
+        "bathrooms": 3,
+        "rating": 4.94,
+        "reviews": 48,
+        "price_from": 250,
+        "photo": "https://placehold.co/600x400/2A1F1A/F4EEE4?text=La+Corsa+Suite",
+        "url": "/penthouse-florence",
+        "book_url": "/book",
+        "highlight": "Jacuzzi · BBQ · Private chef available",
+        "is_featured": True,
+    },
+    {
+        "id": "oltrarno-garden-studio",
+        "name": "Oltrarno Garden Studio",
+        "neighborhood": "oltrarno",
+        "neighborhood_label": "Oltrarno",
+        "tagline": "Quiet courtyard garden · artisan quarter",
+        "guests": 2,
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "rating": 4.87,
+        "reviews": 31,
+        "price_from": 110,
+        "photo": "https://placehold.co/600x400/3A2A1A/F4EEE4?text=Oltrarno+Studio",
+        "url": "#",
+        "book_url": "#",
+        "highlight": "Garden · Palazzo Pitti 5 min",
+        "is_featured": False,
+    },
+    {
+        "id": "santa-croce-family-penthouse",
+        "name": "Santa Croce Family Penthouse",
+        "neighborhood": "santa-croce",
+        "neighborhood_label": "Santa Croce",
+        "tagline": "Rooftop terrace · spacious family layout",
+        "guests": 6,
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "rating": 4.91,
+        "reviews": 24,
+        "price_from": 195,
+        "photo": "https://placehold.co/600x400/1A2A1A/F4EEE4?text=Santa+Croce+Penthouse",
+        "url": "#",
+        "book_url": "#",
+        "highlight": "Rooftop terrace · Sant'Ambrogio market 5 min",
+        "is_featured": False,
+    },
+    {
+        "id": "san-lorenzo-design-apartment",
+        "name": "San Lorenzo Design Apartment",
+        "neighborhood": "san-lorenzo",
+        "neighborhood_label": "San Lorenzo",
+        "tagline": "Contemporary design · Central Market 2 min",
+        "guests": 4,
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "rating": 4.82,
+        "reviews": 19,
+        "price_from": 145,
+        "photo": "https://placehold.co/600x400/1A1A2A/F4EEE4?text=San+Lorenzo+Apt",
+        "url": "#",
+        "book_url": "#",
+        "highlight": "Central Market · San Lorenzo Basilica 3 min",
+        "is_featured": False,
+    },
+]
 
 # Seasonal price lookup by month (1-12)
 MONTH_SEASON: dict[int, dict] = {
@@ -419,6 +496,40 @@ MONTH_SEASON: dict[int, dict] = {
 }
 
 BLOG_ARTICLES = [
+    {
+        "slug": "aurum-concierge-florence",
+        "title": "Aurum Concierge Florence: Transfers, Restaurants & Local Experiences Made Easy",
+        "meta_description": (
+            "Aurum is a Florence concierge service that handles airport transfers, luggage, "
+            "restaurant bookings, excursions, and more — book via WhatsApp in minutes."
+        ),
+        "date": "2026-03-20",
+        "date_display": "March 20, 2026",
+        "read_minutes": 5,
+        "hero_image": "https://placehold.co/1200x600/1A1410/B59866?text=Aurum+Concierge+Florence",
+        "excerpt": (
+            "Arriving in Florence with heavy luggage, no restaurant reservations, "
+            "and no idea where to start? Aurum concierge sorts all of it before you land."
+        ),
+        "content_key": "aurum_concierge",
+    },
+    {
+        "slug": "best-restaurants-street-food-florence-2026",
+        "title": "Where to Eat in Florence: Top 10 Restaurants & Street Food Spots (2026)",
+        "meta_description": (
+            "The best restaurants and street food in Florence for 2026 — from bistecca fiorentina "
+            "to lampredotto. Plus: how to book the hard-to-get tables without the hassle."
+        ),
+        "date": "2026-03-15",
+        "date_display": "March 15, 2026",
+        "read_minutes": 7,
+        "hero_image": "https://placehold.co/1200x600/2A1F1A/F4EEE4?text=Florence+Restaurants+Guide",
+        "excerpt": (
+            "Florence's food scene goes far beyond tourist pasta. Here are the 10 places "
+            "locals actually go — and how to get a table at the ones that are always full."
+        ),
+        "content_key": "restaurants_florence",
+    },
     {
         "slug": "where-to-stay-florence-neighborhoods-2026",
         "title": "Where to Stay in Florence: Best Neighborhoods for Every Traveler (2026)",

@@ -189,8 +189,134 @@ ARTICLES = [
     }
 ]
 
+ARTICLE_AURUM_CONTENT = """<p>If you've ever arrived in Florence after a long flight — heavy suitcase, no lift in your building, hungry, and with zero restaurant reservations — you'll understand why <strong>Aurum Concierge</strong> exists. It's a Florence-based service that takes care of the friction: luggage, transport, bookings, and local experiences, so your trip starts the moment you land, not after two hours of logistics.</p>
+
+<h2>What Aurum does</h2>
+<p>Aurum positions itself as a local concierge for visitors who want to experience Florence properly — not as tourists, but as temporary residents with insider access. The service covers four core areas:</p>
+
+<h3>Airport transfers &amp; private drivers</h3>
+<p>Florence's SMN train station is fast and affordable from the airport, but with luggage for a group it's a different story. Aurum arranges private transfers — car or minivan — timed to your flight arrival. The driver meets you at arrivals with a name sign, helps with bags, and knows the fastest routes around the ZTL restricted zone that catches so many visitors off guard.</p>
+
+<h3>Luggage handling &amp; porter service</h3>
+<p>Florence's historic buildings are beautiful and old. Many have no lift. If you're staying at La Corsa Suite Firenze — a penthouse in a Belle Arti-protected palazzo — you already know this. Aurum provides a porter service that moves your luggage from door to door. Particularly useful if you're moving between properties, checking in early, or simply don't want to drag four suitcases up a marble staircase.</p>
+
+<h3>Restaurant reservations</h3>
+<p>The best restaurants in Florence fill up weeks in advance. Buca Mario, Il Latini, Trattoria Sostanza — these aren't places you walk into at 8pm and get a table. Aurum handles reservations at high-demand spots, and for guests staying at La Corsa Suite, this includes same-day requests that would otherwise be impossible.</p>
+
+<p>The fastest way to book: <strong>WhatsApp the Aurum bot directly</strong>. You describe what you're looking for — cuisine, number of guests, date, time preference — and the bot queries available slots in real time, confirms the options, and books the table. The whole process takes under five minutes. No phone calls, no waiting on hold, no language barrier.</p>
+
+<!-- LISTINGS:neighborhood=centro-storico -->
+
+<h3>Experiences &amp; excursions</h3>
+<p>Beyond logistics, Aurum arranges curated experiences: private winery tours in Chianti (1 hour from Florence by car), cooking classes with local chefs, guided visits to the Uffizi outside public hours, day trips to Siena and San Gimignano. All bookable in advance or on short notice.</p>
+
+<h2>How to book Aurum</h2>
+<p>The simplest approach is WhatsApp. Open the chat, describe what you need — "airport transfer for 4 people arriving 14:30 on March 28" or "dinner for 6 at a traditional Florentine restaurant on Friday evening" — and the bot handles the rest. For more complex multi-day itineraries, the team responds directly.</p>
+
+<p>Guests staying at La Corsa Suite Firenze can request Aurum services at booking time. Restaurant bookings at top spots get priority when placed through the concierge — particularly useful during high season (April–October) when demand is highest.</p>
+
+<h2>The practical advantage</h2>
+<p>The real value of a concierge service isn't luxury — it's time. A 5-minute WhatsApp exchange saves you two hours of research, three unanswered emails to restaurants that only communicate in Italian, and the disappointment of showing up to find nothing available. For a 4-night trip to Florence, that's a meaningful difference.</p>
+
+<blockquote>
+<p>"We had dinner at Buca Mario on our first night — something we couldn't have arranged ourselves that late. Aurum sorted it in the time it took us to unpack." <br><em>— Guest at La Corsa Suite Firenze, March 2026</em></p>
+</blockquote>
+
+<h2>FAQ</h2>
+
+<h3>Is Aurum only for guests of La Corsa Suite Firenze?</h3>
+<p>No. Aurum serves any visitor to Florence. However, guests of La Corsa Suite get preferential availability and a direct line for restaurant reservations.</p>
+
+<h3>How far in advance should I contact Aurum?</h3>
+<p>For airport transfers: 48 hours minimum, ideally at booking time. For restaurant reservations at top venues: as far in advance as possible — 2–3 weeks for dinner at the most popular spots during peak season. The WhatsApp bot can check same-day availability, but options narrow significantly.</p>
+
+<h3>What does the service cost?</h3>
+<p>Airport transfers and porter services are priced per booking. Restaurant reservations are free (the service earns a referral fee from partner venues). Experiences and excursions are priced individually. Contact Aurum via WhatsApp for a quote.</p>
+
+<h3>Is there a minimum stay or booking requirement?</h3>
+<p>No minimum. You can use a single service — just a transfer, or just one restaurant booking — without any package commitment.</p>
+
+<h3>Can Aurum handle last-minute requests?</h3>
+<p>Yes, within reason. The WhatsApp bot responds around the clock. Last-minute restaurant requests depend on availability; last-minute transfers depend on driver availability. For peak season (July–August), advance booking is strongly recommended.</p>"""
+
+
+ARTICLE_RESTAURANTS_CONTENT = """<p>Florence is one of the great food cities in the world — and one of the easiest to get wrong as a visitor. The restaurants immediately around the Duomo and Piazza della Repubblica serve passable pasta to a captive tourist audience. But 200 metres away, Florentines are eating some of the best food in Italy at a fraction of the price. This guide covers both: the landmark restaurants worth the reservation, and the street food spots worth the queue.</p>
+
+<h2>The landmark restaurants (book ahead)</h2>
+<p>These places are perpetually full. <strong>Book 1–2 weeks in advance during peak season</strong> — or use the <a href="/blog/aurum-concierge-florence">Aurum concierge WhatsApp service</a> to check last-minute availability. The bot queries open slots in real time and confirms your reservation in minutes.</p>
+
+<h3>1. Buca Mario (Centro Storico)</h3>
+<p>Founded in 1886, Buca Mario claims to be Florence's oldest restaurant. The bistecca fiorentina — a thick T-bone from Chianina cattle, grilled rare — is the reason to go. Order it by the kilo. The setting, in a vaulted cellar on Via Dante Alighieri, justifies the price. <strong>Book via Airbnb or call directly; very limited same-day availability.</strong></p>
+
+<h3>2. Trattoria Sostanza (Centro Storico)</h3>
+<p>Known locally as "il Troia," Sostanza has been serving butter-drenched pasta and their famous bistecca since 1869. The communal tables and elbow-to-elbow seating are entirely intentional — this is not a romantic dinner spot. It's where Florentines bring visiting relatives to eat properly. Two sittings per evening, no lingering. <strong>Reservations essential; often fully booked 2–3 weeks out.</strong></p>
+
+<!-- LISTINGS:neighborhood=centro-storico -->
+
+<h3>3. Il Latini (Santa Maria Novella)</h3>
+<p>The queue outside Il Latini has become a Florence institution in itself. No reservations accepted — you arrive, add your name to the list, and wait. Once inside, you share long tables with strangers and eat whatever is served (you don't choose). The ribollita, pappardelle with wild boar, and grilled meats are consistently excellent. Arrive by 7pm or be prepared to wait 90 minutes.</p>
+
+<h3>4. Trattoria Mario (San Lorenzo)</h3>
+<p>A Florentine lunch institution. Mario's opens at noon, closes when the food runs out (usually around 2:30pm), and has no dinner service. Queue from 11:45. Cash only, shared tables, no reservations. The ribollita is €7. One of the best value lunches in Italy.</p>
+
+<h3>5. Buca dell'Orafo (Lungarno)</h3>
+<p>Directly facing the Arno, a few steps from Ponte Vecchio. One of the few tourist-proximate restaurants that genuinely deserves its reputation — the pappardelle with hare ragù and the bistecca are both excellent. Book ahead; the terrace tables go first.</p>
+
+<!-- LISTINGS:neighborhood=oltrarno -->
+
+<h2>Where locals eat: the neighbourhood trattorias</h2>
+
+<h3>6. Trattoria da Ruggero (Oltrarno)</h3>
+<p>No views, no tourist pricing, no English menu. Ruggero serves classic Florentine cooking — ribollita, lampredotto, grilled meats — to a loyal neighbourhood crowd. Arrive early (7pm) or expect to wait. Cash preferred.</p>
+
+<h3>7. Il Santo Bevitore (Oltrarno)</h3>
+<p>The best wine bar in Florence, period. The list runs to several hundred labels with intelligent markup; the food — boards of cured meats, seasonal vegetable dishes, excellent pasta — is kitchen-serious rather than an afterthought. Book ahead for dinner; walk in for aperitivo.</p>
+
+<h3>8. Ristorante Borghese (Santa Croce)</h3>
+<p>Quiet, family-run, excellent value. The tagliatelle al tartufo (truffle pasta) in season is extraordinary. The kind of place you stumble onto and return to every trip. No strong online presence by design.</p>
+
+<!-- LISTINGS:neighborhood=santa-croce -->
+
+<h2>Street food: what to eat standing up</h2>
+
+<h3>9. Lampredotto — All'Antico Vinaio &amp; the tripe carts</h3>
+<p>Lampredotto is the fourth stomach of the cow, slow-cooked in broth and served in a bun with salsa verde and hot sauce. It sounds challenging; it is genuinely delicious. The <em>trippai</em> (tripe carts) near Mercato Centrale and at Piazza dei Ciompi are the authentic experience — €3–4 for a sandwich. All'Antico Vinaio (Via dei Neri) serves it alongside schiacciata sandwiches with local meats; expect a queue of 20–30 minutes at peak times.</p>
+
+<h3>10. Gelateria dei Neri &amp; Gelateria Sbrino</h3>
+<p>Florentine gelato is made fresh daily with seasonal ingredients and a higher milk-to-air ratio than the tourist shops. Gelateria dei Neri (near Santa Croce) keeps it simple and excellent — the fior di latte and pistachio are benchmarks. Gelateria Sbrino in Oltrarno is smaller, more experimental, and worth the detour.</p>
+
+<h2>Getting the reservations you want</h2>
+<p>The restaurants above are perpetually oversubscribed from April through October. Two strategies work:</p>
+
+<ol>
+<li><strong>Book very early</strong>: 2–3 weeks for Sostanza and Buca Mario during high season. Their booking systems accept international reservations online.</li>
+<li><strong>Use Aurum concierge</strong>: The <a href="/blog/aurum-concierge-florence">Aurum WhatsApp service</a> checks real-time slot availability across partner restaurants and confirms bookings within minutes. Particularly useful for same-week or same-day requests that would otherwise be impossible to arrange remotely.</li>
+</ol>
+
+<p>Send a WhatsApp message describing what you're looking for — cuisine type, date, guests, time preference — and the bot handles the rest. No phone calls to restaurants that don't pick up, no navigating Italian booking systems, no arriving to find the table you thought you had confirmed doesn't exist.</p>
+
+<h2>FAQ</h2>
+
+<h3>What is the must-eat dish in Florence?</h3>
+<p>Bistecca fiorentina — a thick Chianina T-bone, grilled over charcoal and served very rare. Order it at Buca Mario or Sostanza, by the kilo, and share it. It's one of the great dishes of Italian cooking.</p>
+
+<h3>What time do Florentines actually eat dinner?</h3>
+<p>8pm to 9:30pm is peak dinner time. Restaurants typically open at 7pm; arriving at 7:30pm is the sweet spot for getting a table without a long wait at no-reservation spots.</p>
+
+<h3>Is street food safe to eat in Florence?</h3>
+<p>Yes. The tripe carts, All'Antico Vinaio, and the lampredotto vendors have been operating for decades and are subject to the same food safety standards as restaurants. The lampredotto is fully cooked.</p>
+
+<h3>Are Florence restaurants cash-only?</h3>
+<p>Some traditional trattorias and street food stalls prefer cash, particularly Trattoria Mario and the tripe carts. Cards are accepted at most sit-down restaurants. Carry €30–50 in cash as backup.</p>
+
+<h3>How do I book a restaurant in Florence from abroad?</h3>
+<p>Online booking systems (TheFork, direct websites) work for most restaurants. For places that don't take online reservations — or when you need same-week availability — the <a href="/blog/aurum-concierge-florence">Aurum concierge WhatsApp service</a> is the most reliable option. The bot queries available slots and confirms within minutes.</p>"""
+
+
 # ── BLOG_CONTENT: maps content_key → HTML ─────────────────────────────────────
 BLOG_CONTENT: dict[str, str] = {
+    "aurum_concierge": ARTICLE_AURUM_CONTENT,
+    "restaurants_florence": ARTICLE_RESTAURANTS_CONTENT,
     "neighborhoods": ARTICLE_1_CONTENT,
     "cost_comparison": ARTICLE_2_CONTENT,
 }
