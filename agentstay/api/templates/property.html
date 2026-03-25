@@ -9,7 +9,7 @@
 <meta property="og:description" content="{{ property.tagline }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ base_url }}/penthouse-florence">
-<meta property="og:site_name" content="F1 Penthouse Florence">
+<meta property="og:site_name" content="La Corsa Suite Firenze">
 <meta name="twitter:card" content="summary_large_image">
 {% endblock %}
 
@@ -73,7 +73,7 @@
   <div class="property-layout">
     <!-- MAIN CONTENT -->
     <div class="property-main">
-      <div class="property-badge">🏎️ Ferrari-Themed Penthouse · Florence</div>
+      <div class="property-badge">La Corsa Suite · Florence, Italy</div>
       <h1 class="property-title">{{ property.name }}</h1>
       <p class="property-short">{{ property.subtitle }}</p>
 
@@ -102,11 +102,44 @@
 
       <!-- ABOUT -->
       <div class="content-section">
-        <h2>About the penthouse</h2>
-        <p>{{ property.tagline }}.</p>
-        <p>Located at {{ property.address.street }}, in the heart of Florence's historic centre, the F1 Penthouse puts you within walking distance of the city's greatest landmarks. The Arno river is a 1-minute walk. Ponte Vecchio takes 8 minutes on foot. The Uffizi Gallery is 9 minutes away.</p>
-        <p>The Ferrari theme runs throughout — from the entrance through to the living areas — with authentic memorabilia and design details that reflect decades of motorsport history. Guests consistently describe it as tasteful rather than kitschy.</p>
-        <p>Two private terraces give you city and rooftop views. The fully equipped kitchen means you can cook in. And with 3 bedrooms, 8 beds, and 3 full bathrooms, there's genuine comfort for up to 7 guests.</p>
+        <h2>About the suite</h2>
+        <p>La Corsa Suite Firenze is a fully refurbished penthouse at Via dei Federighi 1, 50 metres from Goldoni Square and 7–10 minutes' walk from Santa Maria Novella station. Ponte Vecchio, the Uffizi Gallery, and the Duomo are all within a 10-minute walk — yet the street itself is quiet and residential.</p>
+        <p>The suite combines high-tech interiors with authentic Ferrari heritage: original pieces and memorabilia that invite you to share a genuine passion for Italian motorsport, rather than mere decoration. The result is a space that feels like a private gallery as much as a home.</p>
+        <p>Two magnificent terraces overlook the Florentine hills. Make a BBQ, relax in the jacuzzi (available seasonally, price on request), and dine outdoors under the Tuscan sky. The outdoor kitchen — with oven, sink, and BBQ — makes al fresco living effortless.</p>
+        <p>The building is protected by Belle Arti and has no lift — but we provide a luggage porter service included in the price. Check-in is always personal: your host meets you at the property. A private Italian chef, with a culinary tradition going back 150 years, is available on request to cook in your kitchen or arrange a bespoke dining experience.</p>
+      </div>
+
+      <!-- BEDROOMS -->
+      <div class="content-section">
+        <h2>Bedrooms</h2>
+        {% for bedroom in property.bedrooms %}
+        <div style="padding: 16px 0; border-bottom: 1px solid var(--sand);">
+          <strong style="font-family: var(--font-serif); font-size: 1.05rem;">{{ bedroom.name }}</strong>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+            {{ bedroom.bed }} &nbsp;·&nbsp; {{ bedroom.bathroom }}
+            {% if bedroom.extras %}&nbsp;·&nbsp; {{ bedroom.extras | join(', ') }}{% endif %}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- SERVICES -->
+      <div class="content-section">
+        <h2>Staff &amp; services</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <h3 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--tobacco); margin-bottom: 12px;">Included</h3>
+            {% for item in property.services.included %}
+            <div class="amenity-item">{{ item }}</div>
+            {% endfor %}
+          </div>
+          <div>
+            <h3 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;">Available on request</h3>
+            {% for item in property.services.on_request %}
+            <div class="amenity-item">{{ item }}</div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
 
       <!-- AMENITIES -->
