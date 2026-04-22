@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}{{ property.name }} — {{ property.tagline }}{% endblock %}
+{% block description %}{{ property.subtitle }}{% endblock %}
+{% block canonical_path %}/penthouse-florence{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="{{ property.name }}">
+<meta property="og:description" content="{{ property.tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ base_url }}/penthouse-florence">
+<meta property="og:site_name" content="La Corsa Suite Firenze">
+<meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "{{ property.name }}",
+  "url": "{{ base_url }}/penthouse-florence",
+  "description": "{{ property.subtitle }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ property.address.street }}",
+    "addressLocality": "{{ property.address.city }}",
+    "postalCode": "{{ property.address.postal_code }}",
+    "addressCountry": "{{ property.address.country_code }}"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ property.coordinates.lat }},
+    "longitude": {{ property.coordinates.lng }}
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ property.trust.overall }}",
+    "reviewCount": "{{ property.trust.total_reviews }}"
+  },
+  "numberOfRooms": {{ property.capacity.bedrooms }},
+  "amenityFeature": [
+    {% for f in property.features %}{"@type":"LocationFeatureSpecification","name":"{{ f }}","value":true}{% if not loop.last %},{% endif %}{% endfor %}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 24px 0 0;">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="/">Home</a><span>›</span>
+      The Penthouse
+    </nav>
+  </div>
+</div>
+
+<!-- PHOTO GALLERY -->
+<section style="padding: 16px 0 40px;">
+  <div class="container">
+    <img src="{{ property.photos[0].url }}" alt="{{ property.photos[0].alt }}" class="photo-cover">
+    <div class="photo-grid">
+      {% for photo in property.photos[1:9] %}
+      <img src="{{ photo.url }}" alt="{{ photo.alt }}" loading="lazy">
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTY CONTENT -->
+<div class="container">
+  <div class="property-layout">
+    <!-- MAIN CONTENT -->
+    <div class="property-main">
+      <div class="property-badge">La Corsa Suite · Florence, Italy</div>
+      <h1 class="property-title">{{ property.name }}</h1>
+      <p class="property-short">{{ property.subtitle }}</p>
+
+      <div class="property-stats">
+        <div class="stat-item">
+          <strong>{{ property.capacity.max_guests }}</strong>
+          guests max
+        </div>
+        <div class="stat-item">
+          <strong>{{ property.capacity.bedrooms }}</strong>
+          bedrooms
+        </div>
+        <div class="stat-item">
+          <strong>{{ property.capacity.beds }}</strong>
+          beds
+        </div>
+        <div class="stat-item">
+          <strong>{{ property.capacity.bathrooms }}</strong>
+          bathrooms
+        </div>
+        <div class="stat-item">
+          <strong>⭐ {{ property.trust.overall }}</strong>
+          ({{ property.trust.total_reviews }} reviews)
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="content-section">
+        <h2>About the suite</h2>
+        <p>La Corsa Suite Firenze is a fully refurbished penthouse at Via dei Federighi 1, 50 metres from Goldoni Square and 7–10 minutes' walk from Santa Maria Novella station. Ponte Vecchio, the Uffizi Gallery, and the Duomo are all within a 10-minute walk — yet the street itself is quiet and residential.</p>
+        <p>The suite combines high-tech interiors with authentic Ferrari heritage: original pieces and memorabilia that invite you to share a genuine passion for Italian motorsport, rather than mere decoration. The result is a space that feels like a private gallery as much as a home.</p>
+        <p>Two magnificent terraces overlook the Florentine hills. Make a BBQ, relax in the jacuzzi (available seasonally, price on request), and dine outdoors under the Tuscan sky. The outdoor kitchen — with oven, sink, and BBQ — makes al fresco living effortless.</p>
+        <p>The building is protected by Belle Arti and has no lift — but we provide a luggage porter service included in the price. Check-in is always personal: your host meets you at the property. A private Italian chef, with a culinary tradition going back 150 years, is available on request to cook in your kitchen or arrange a bespoke dining experience.</p>
+      </div>
+
+      <!-- BEDROOMS -->
+      <div class="content-section">
+        <h2>Bedrooms</h2>
+        {% for bedroom in property.bedrooms %}
+        <div style="padding: 16px 0; border-bottom: 1px solid var(--sand);">
+          <strong style="font-family: var(--font-serif); font-size: 1.05rem;">{{ bedroom.name }}</strong>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">
+            {{ bedroom.bed }} &nbsp;·&nbsp; {{ bedroom.bathroom }}
+            {% if bedroom.extras %}&nbsp;·&nbsp; {{ bedroom.extras | join(', ') }}{% endif %}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- SERVICES -->
+      <div class="content-section">
+        <h2>Staff &amp; services</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <h3 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--tobacco); margin-bottom: 12px;">Included</h3>
+            {% for item in property.services.included %}
+            <div class="amenity-item">{{ item }}</div>
+            {% endfor %}
+          </div>
+          <div>
+            <h3 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;">Available on request</h3>
+            {% for item in property.services.on_request %}
+            <div class="amenity-item">{{ item }}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- AMENITIES -->
+      <div class="content-section">
+        <h2>Amenities</h2>
+        {% for group_name, items in property.amenities.items() %}
+        <div class="amenities-group">
+          <h3>{{ group_name }}</h3>
+          <div class="amenities-list">
+            {% for item in items %}
+            <div class="amenity-item">{{ item }}</div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- PRICING -->
+      <div class="content-section">
+        <h2>Pricing</h2>
+        <div class="season-grid">
+          {% for season in property.pricing.seasons %}
+          <div class="season-card">
+            <div class="season-label">{{ season.label }}</div>
+            <div class="season-price">€{{ season.per_night }}<span style="font-size:0.85rem; color:var(--muted);">/night</span></div>
+            <div class="season-months">{{ season.months }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;">
+          Cleaning fee: €{{ property.pricing.cleaning_fee }} (once per stay) ·
+          Minimum {{ property.pricing.min_nights }} nights
+        </p>
+        <p style="color:var(--muted); font-size:0.9rem;">
+          Discounts: {{ property.pricing.discounts[0].percent }}% weekly (7+ nights) ·
+          {{ property.pricing.discounts[1].percent }}% monthly (28+ nights)
+        </p>
+        <p style="margin-top:16px; color:var(--muted); font-size:0.85rem;">
+          Italian tourist tax: approx. €3.50/person/night (max 7 nights), payable on arrival.
+        </p>
+      </div>
+
+      <!-- LOCATION -->
+      <div class="content-section">
+        <h2>Location</h2>
+        <p style="color:var(--muted); margin-bottom:16px;">{{ property.address.street }}, {{ property.address.neighborhood }}, {{ property.address.city }}, {{ property.address.country }}</p>
+        <ul class="landmark-list">
+          {% for lm in property.landmarks %}
+          <li>
+            <span>📍 {{ lm.name }}</span>
+            <span class="mins">{{ lm.walk_minutes }} min walk</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <p style="margin-top:16px;">
+          <a href="/location" style="color:var(--accent); text-decoration:none;">Full location guide →</a>
+        </p>
+      </div>
+
+      <!-- TRUST -->
+      <div class="content-section">
+        <h2>Guest reviews</h2>
+        <div class="trust-card">
+          <div class="trust-overall">
+            <div class="rating-big">{{ property.trust.overall }}</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <div class="rating-meta">{{ property.trust.total_reviews }} verified reviews</div>
+            </div>
+          </div>
+          <div class="trust-scores">
+            {% for key, val in property.trust.scores.items() %}
+            <div class="score-item">
+              <span class="val">{{ val }}</span>
+              <span class="lbl">{{ key | title }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          <blockquote class="trust-summary">{{ property.trust.summary }}</blockquote>
+          {% for review in property.trust.reviews %}
+          <div class="review">
+            <div class="review-header">
+              <span class="review-author">{{ review.author }}</span>
+              <span class="review-source">{{ review.source }}</span>
+              <span class="review-date">{{ review.date }}</span>
+              <span class="review-rating">{% for _ in range(review.rating) %}★{% endfor %}</span>
+            </div>
+            <p>"{{ review.text }}"</p>
+          </div>
+          {% endfor %}
+          <p class="trust-verify">
+            All reviews verified via Airbnb. ·
+            <a href="{{ property.airbnb_url }}" target="_blank" rel="noopener">View on Airbnb</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- BEST FOR -->
+      <div class="content-section">
+        <h2>Best for</h2>
+        <ul style="list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+          {% for item in property.best_for %}
+          <li class="amenity-item">{{ item }}</li>
+          {% endfor %}
+        </ul>
+        {% if property.not_for %}
+        <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;">
+          <strong>Not the right fit for:</strong>
+          {% for n in property.not_for %}{{ n }}{% if not loop.last %}, {% endif %}{% endfor %}.
+        </p>
+        {% endif %}
+      </div>
+
+      <!-- FAQ PREVIEW -->
+      <div class="content-section">
+        <h2>Common questions</h2>
+        {% for faq in property.faqs[:4] %}
+        <details>
+          <summary>{{ faq.q }}</summary>
+          <div class="faq-answer">{{ faq.a }}</div>
+        </details>
+        {% endfor %}
+        <p style="margin-top:16px;">
+          <a href="/faq" style="color:var(--accent); text-decoration:none;">All FAQ →</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="property-sidebar">
+      <div class="booking-cta">
+        <div class="cta-price">From €{{ property.pricing.seasons[0].per_night }}<span>/night</span></div>
+        <div class="cta-rating"><strong>★ {{ property.trust.overall }}</strong> · {{ property.trust.total_reviews }} reviews</div>
+        <form class="cta-form" action="/availability" method="get">
+          <input type="date" name="check_in" placeholder="Check-in" required>
+          <input type="date" name="check_out" placeholder="Check-out" required>
+          <select name="guests">
+            {% for i in range(1, 8) %}
+            <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} guest{{ 's' if i > 1 else '' }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="btn-cta">Check availability &amp; price</button>
+        </form>
+        <p class="cta-note">✓ No Airbnb fees — book direct</p>
+        <p class="cta-meta">Min {{ property.pricing.min_nights }} nights · Cleaning €{{ property.pricing.cleaning_fee }}</p>
+      </div>
+
+      <div class="sidebar-card" style="margin-top:16px;">
+        <h3>Contact host</h3>
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:12px;">Questions before booking?</p>
+        <a href="mailto:{{ property.host.email }}" style="display:block; color:var(--accent); text-decoration:none; margin-bottom:6px; font-size:0.9rem;">✉ {{ property.host.email }}</a>
+        <a href="tel:{{ property.host.phone }}" style="display:block; color:var(--accent); text-decoration:none; font-size:0.9rem;">📞 {{ property.host.phone }}</a>
+        <p style="color:var(--muted); font-size:0.82rem; margin-top:8px;">Languages: {{ property.host.languages | join(', ') | upper }}</p>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Also on Airbnb</h3>
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:12px;">Prefer Airbnb? Find us there too — though you'll save fees by booking direct.</p>
+        <a href="{{ property.airbnb_url }}" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:none; font-size:0.85rem;">View on Airbnb →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

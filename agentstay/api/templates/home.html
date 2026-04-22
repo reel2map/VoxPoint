@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block title %}La Corsa Suite Firenze — Private Penthouse, Book Direct{% endblock %}
+{% block description %}La Corsa Suite Firenze — private cultural residence at Via dei Federighi 1, Florence. Three bedrooms, two terraces, F1 heritage as cultural undertone. Rated 4.94/5. Book direct.{% endblock %}
+{% block canonical_path %}/{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "La Corsa Suite Firenze",
+  "url": "{{ base_url }}",
+  "image": "{{ property.photos[0].url }}",
+  "description": "{{ property.tagline }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ property.address.street }}",
+    "addressLocality": "{{ property.address.city }}",
+    "postalCode": "{{ property.address.postal_code }}",
+    "addressCountry": "{{ property.address.country_code }}"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ property.coordinates.lat }},
+    "longitude": {{ property.coordinates.lng }}
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ property.trust.overall }}",
+    "reviewCount": "{{ property.trust.total_reviews }}"
+  },
+  "telephone": "{{ property.host.phone }}",
+  "email": "{{ property.host.email }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════
+     HERO — full viewport, dark, minimal
+     ══════════════════════════════════════════ -->
+<section class="hero-full">
+  <div class="hero-bg" style="background-image: url('{{ property.photos[0].url }}');"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Via dei Federighi 1 &nbsp;·&nbsp; Florence, Italy</p>
+    <h1 class="hero-title">La Corsa<br><em>Suite Firenze</em></h1>
+    <p class="hero-sub">A private residence. Three bedrooms, two terraces,<br>the heritage of speed as a cultural undertone.</p>
+    <div class="hero-actions">
+      <a href="/book" class="btn-hero-primary">Book direct</a>
+      <a href="/penthouse-florence" class="btn-hero-ghost">Explore the suite →</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span></span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     BOOKING STRIP
+     ══════════════════════════════════════════ -->
+<section class="booking-strip">
+  <div class="container">
+    <form class="booking-row" action="/availability" method="get">
+      <div class="bfield">
+        <label>Check-in</label>
+        <input type="date" name="check_in" required>
+      </div>
+      <div class="bfield">
+        <label>Check-out</label>
+        <input type="date" name="check_out" required>
+      </div>
+      <div class="bfield bfield-sm">
+        <label>Guests</label>
+        <select name="guests">
+          {% for i in range(1, 8) %}
+          <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} guest{{ 's' if i > 1 else '' }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn-search">Check availability</button>
+    </form>
+    <p class="booking-note">Book direct — no Airbnb fees. From €{{ property.pricing.seasons[0].per_night }}/night.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     LA SUITE — editorial intro
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-light">
+  <div class="container">
+    <div class="editorial-grid editorial-img-right">
+      <div class="editorial-text">
+        <p class="editorial-label">The Suite</p>
+        <h2 class="editorial-heading">An experience,<br>not just accommodation</h2>
+        <p class="editorial-body">{{ property.subtitle }}</p>
+        <ul class="suite-facts">
+          <li><span class="fact-num">{{ property.capacity.max_guests }}</span><span class="fact-lbl">Guests</span></li>
+          <li><span class="fact-num">{{ property.capacity.bedrooms }}</span><span class="fact-lbl">Bedrooms</span></li>
+          <li><span class="fact-num">2</span><span class="fact-lbl">Terraces</span></li>
+          <li><span class="fact-num">{{ property.trust.overall }}</span><span class="fact-lbl">Rating</span></li>
+        </ul>
+        <a href="/penthouse-florence" class="editorial-link">Explore the suite →</a>
+      </div>
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap">
+          <img src="{{ property.photos[1].url }}" alt="{{ property.photos[1].alt }}" loading="lazy">
+        </div>
+        <div class="editorial-img-secondary">
+          <img src="{{ property.photos[3].url }}" alt="{{ property.photos[3].alt }}" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PHOTO MOSAIC
+     ══════════════════════════════════════════ -->
+<section class="mosaic-section">
+  <div class="mosaic-grid">
+    {% for photo in property.photos[1:7] %}
+    <div class="mosaic-item mosaic-{{ loop.index }}">
+      <img src="{{ photo.url }}" alt="{{ photo.alt }}" loading="lazy">
+    </div>
+    {% endfor %}
+  </div>
+  <div class="container mosaic-cta">
+    <a href="/penthouse-florence" class="editorial-link-sm">All photos →</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     LA CORSA — F1 section (dark)
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-dark" id="la-corsa">
+  <div class="container">
+    <div class="editorial-grid editorial-img-left">
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap editorial-img-tall">
+          <img src="{{ property.photos[6].url }}" alt="F1 heritage" loading="lazy">
+        </div>
+      </div>
+      <div class="editorial-text">
+        <p class="editorial-label editorial-label-red">La Corsa</p>
+        <h2 class="editorial-heading">Speed as<br>culture</h2>
+        <p class="editorial-body">F1 is not decoration — it's context. The aesthetic of discipline, concentration, absolute precision. Archive visuals, textures of metal and rubber, a driver's gaze in the moment before the start.</p>
+        <p class="editorial-body">Not chaos. Not noise. <em>Control.</em></p>
+        <div class="corsa-detail">
+          <span class="corsa-line"></span>
+          <span class="corsa-caption">Ferrari. Speed. Florence.</span>
+        </div>
+        <a href="/blog/aurum-concierge-florence" class="editorial-link" style="margin-top:24px; display:inline-block;">Discover Aurum Concierge →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FIRENZE — city section (warm light)
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-warm" id="firenze">
+  <div class="container">
+    <div class="editorial-grid editorial-img-right">
+      <div class="editorial-text">
+        <p class="editorial-label">Florence</p>
+        <h2 class="editorial-heading">The city as<br>cultural context</h2>
+        <p class="editorial-body">Florence is not a tourist backdrop — it is the continuation of the space's own aesthetic. Architectural fragments, narrow streets, warm evening light, sculpture behind glass.</p>
+        <ul class="landmark-list">
+          {% for lm in property.landmarks %}
+          <li>
+            <span class="lm-name">{{ lm.name }}</span>
+            <span class="lm-min">{{ lm.walk_minutes }} min</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <a href="/location" class="editorial-link">Explore the location →</a>
+      </div>
+      <div class="editorial-visual">
+        <div class="editorial-img-wrap">
+          <img src="{{ property.photos[9].url }}" alt="Florence neighbourhood" loading="lazy">
+        </div>
+        <div class="map-embed">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2880.7!2d11.2489!3d43.7712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDQ2JzE2LjMiTiAxMcKwMTQnNTYuMSJF!5e0!3m2!1sen!2sit!4v1"
+            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     IL SERVIZIO — concierge section
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-mid" id="servizio">
+  <div class="container">
+    <div class="servizio-header">
+      <p class="editorial-label">The Service</p>
+      <h2 class="editorial-heading editorial-heading-center">Care as craft</h2>
+      <p class="editorial-body editorial-body-center">Not generic assistance. Attention to detail — a quiet gesture, a door opened at the right moment, a deep knowledge of the city.</p>
+    </div>
+    <div class="servizio-grid">
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Personal check-in</h3>
+        <p>Your host meets you in person. No key codes, no digital locks. A real welcome.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Curated recommendations</h3>
+        <p>Restaurants, artisan workshops, wine cellars — not tourist guides, but places residents know.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Flexibility</h3>
+        <p>Schedules, transfers, special needs. Booking direct means service tailored to you.</p>
+      </div>
+      <div class="servizio-card">
+        <div class="servizio-icon">◈</div>
+        <h3>Direct response</h3>
+        <p>No intermediary. Call or write — response in hours, not days.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="/blog/restaurants-florence-top-10" class="editorial-link">Florence dining guide — our top picks →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     REVIEWS — testimonials
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-light">
+  <div class="container">
+    <div class="reviews-header">
+      <p class="editorial-label">Reviews</p>
+      <h2 class="editorial-heading">{{ property.trust.overall }}<em>/5</em></h2>
+      <p class="reviews-count">{{ property.trust.total_reviews }} verified reviews &middot; Airbnb</p>
+    </div>
+    <div class="reviews-grid">
+      {% for review in property.trust.reviews %}
+      <div class="review-card">
+        <p class="review-text">"{{ review.text }}"</p>
+        <div class="review-meta">
+          <span class="review-author">{{ review.author }}</span>
+          <span class="review-date">{{ review.date }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="reviews-link-wrap">
+      <a href="/reviews" class="editorial-link">All reviews →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PRICING — transparent
+     ══════════════════════════════════════════ -->
+<section class="editorial-section editorial-dark pricing-section">
+  <div class="container">
+    <p class="editorial-label editorial-label-subtle">Pricing</p>
+    <h2 class="editorial-heading">Complete transparency.<br>No platform markup.</h2>
+    <p class="editorial-body">Book direct and save the platform surcharge (15–20%). Same apartment, same host, real price.</p>
+    <div class="pricing-grid">
+      {% for season in property.pricing.seasons %}
+      <div class="price-card">
+        <div class="price-season">{{ season.label }}</div>
+        <div class="price-amount">€{{ season.per_night }}<span>/night</span></div>
+        <div class="price-months">{{ season.months }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="pricing-note">+ Cleaning €{{ property.pricing.cleaning_fee }} · Min {{ property.pricing.min_nights }} nights · Weekly discount {{ property.pricing.discounts[0].percent }}%</p>
+    <a href="/availability" class="btn-hero-primary" style="margin-top:32px; display:inline-block;">Get exact price for your dates</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     BLOG / EDITORIALE
+     ══════════════════════════════════════════ -->
+{% if articles %}
+<section class="editorial-section editorial-warm">
+  <div class="container">
+    <p class="editorial-label">Journal</p>
+    <h2 class="editorial-heading">Florence — guides &amp; perspectives</h2>
+    <div class="blog-editorial-grid">
+      {% for article in articles %}
+      <div class="blog-editorial-card">
+        <div class="blog-editorial-img">
+          <img src="{{ article.hero_image }}" alt="{{ article.title }}" loading="lazy">
+        </div>
+        <div class="blog-editorial-body">
+          <p class="blog-tag">{{ article.read_minutes }} min</p>
+          <h3 class="blog-editorial-title"><a href="/blog/{{ article.slug }}">{{ article.title }}</a></h3>
+          <p class="blog-editorial-excerpt">{{ article.excerpt }}</p>
+          <a href="/blog/{{ article.slug }}" class="editorial-link-sm">Read →</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div style="text-align:center; margin-top:48px;">
+      <a href="/blog" class="editorial-link">View all articles →</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ══════════════════════════════════════════
+     CTA FINALE
+     ══════════════════════════════════════════ -->
+<section class="cta-final">
+  <div class="cta-final-bg"></div>
+  <div class="container cta-final-inner">
+    <p class="editorial-label editorial-label-subtle">Booking</p>
+    <h2 class="cta-final-heading">Ready for Florence?</h2>
+    <p class="cta-final-sub">Book La Corsa Suite directly — no intermediaries, no surprises.</p>
+    <div class="cta-final-actions">
+      <a href="/book" class="btn-hero-primary">Book the suite</a>
+      <a href="/contact" class="btn-hero-ghost">Contact the host →</a>
+    </div>
+    <p class="cta-final-contact">
+      <a href="tel:+393311385266">+39 331 138 5266</a>
+      &nbsp;·&nbsp;
+      <a href="mailto:pent.house.f1.florence@gmail.com">pent.house.f1.florence@gmail.com</a>
+    </p>
+  </div>
+</section>
+
+{% endblock %}

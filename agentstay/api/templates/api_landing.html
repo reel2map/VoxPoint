@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}API for AI Agents — F1 Penthouse Florence{% endblock %}
+{% block description %}F1 Penthouse Florence REST API for AI travel agents. Check availability, get quotes, create reservations. OpenAPI spec, MCP server, machine-readable property data.{% endblock %}
+{% block canonical_path %}/api{% endblock %}
+
+{% block content %}
+<div style="padding: 40px 0;">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="/">Home</a><span>›</span>
+      API for Agents
+    </nav>
+
+    <h1 class="section-title" style="margin-top:16px;">API for AI Travel Agents</h1>
+    <p class="section-subtitle">F1 Penthouse Florence is fully machine-readable. AI agents can query availability, get pricing, and create reservation holds without scraping.</p>
+
+    <!-- ENDPOINTS -->
+    <div class="api-section" style="margin-bottom:32px;">
+      <h2>Core endpoints</h2>
+      <p>Base URL: <code>{{ base_url }}/api/v1</code></p>
+      <div class="endpoint-cards">
+        <div class="ep"><span class="method get">GET</span> <code>/property</code> — Full property data, amenities, pricing, policies, reviews</div>
+        <div class="ep"><span class="method get">GET</span> <code>/availability?check_in=YYYY-MM-DD&amp;check_out=YYYY-MM-DD&amp;guests=2</code> — Availability + price breakdown</div>
+        <div class="ep"><span class="method post">POST</span> <code>/quote</code> — Detailed price quote (JSON body)</div>
+        <div class="ep"><span class="method post">POST</span> <code>/reservations</code> — Create reservation hold (blocks dates, returns payment info)</div>
+        <div class="ep"><span class="method get">GET</span> <code>/reservations/{id}</code> — Reservation status</div>
+      </div>
+      <div class="api-links">
+        <a href="/docs">Interactive Swagger UI</a>
+        <a href="/redoc">ReDoc</a>
+        <a href="/api/openapi.json">OpenAPI JSON</a>
+      </div>
+    </div>
+
+    <!-- EXAMPLE RESPONSE -->
+    <div style="margin-bottom:32px;">
+      <h2 style="font-family:Georgia,serif; font-size:1.3rem; margin-bottom:16px;">Example: GET /api/v1/availability</h2>
+      <pre style="background:var(--dark); color:#ccc; border-radius:var(--radius); padding:20px; font-size:0.85rem; overflow-x:auto; line-height:1.6;"><code>{
+  "check_in": "2026-05-10",
+  "check_out": "2026-05-17",
+  "guests": 4,
+  "available": true,
+  "nights": 7,
+  "price_breakdown": {
+    "nights": 7,
+    "nightly_avg": 350,
+    "accommodation": 2450,
+    "discount_label": "Weekly discount",
+    "discount_percent": 10,
+    "discount_amount": -245,
+    "cleaning_fee": 150,
+    "city_tax": 98,
+    "city_tax_note": "Approx. €3.50/person/night, max 7 nights",
+    "total": 2453,
+    "currency": "EUR"
+  }
+}</code></pre>
+    </div>
+
+    <!-- QUICK START -->
+    <div style="margin-bottom:32px;">
+      <h2 style="font-family:Georgia,serif; font-size:1.3rem; margin-bottom:16px;">Quick start for AI agents</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
+          <h3 style="font-size:1rem; margin-bottom:12px;">1. Get property data</h3>
+          <pre style="background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:12px; font-size:0.8rem;"><code>GET /api/v1/property</code></pre>
+          <p style="color:var(--muted); font-size:0.85rem; margin-top:8px;">Returns full property details: capacity, amenities, pricing rules, policies, reviews, coordinates.</p>
+        </div>
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
+          <h3 style="font-size:1rem; margin-bottom:12px;">2. Check availability</h3>
+          <pre style="background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:12px; font-size:0.8rem;"><code>GET /api/v1/availability
+  ?check_in=2026-06-01
+  &amp;check_out=2026-06-08
+  &amp;guests=4</code></pre>
+        </div>
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
+          <h3 style="font-size:1rem; margin-bottom:12px;">3. Create reservation</h3>
+          <pre style="background:var(--bg); border:1px solid var(--border); border-radius:4px; padding:12px; font-size:0.8rem;"><code>POST /api/v1/reservations
+{
+  "check_in": "2026-06-01",
+  "check_out": "2026-06-08",
+  "guests": 4,
+  "guest": { ... }
+}</code></pre>
+        </div>
+        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px;">
+          <h3 style="font-size:1rem; margin-bottom:12px;">4. MCP Server</h3>
+          <p style="color:var(--muted); font-size:0.85rem;">For Claude Desktop and compatible agents, use our MCP server for tool-call-based access.</p>
+          <a href="/mcp" style="color:var(--accent); text-decoration:none; font-size:0.9rem;">MCP server docs →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISCOVERY FILES -->
+    <div style="margin-bottom:32px;">
+      <h2 style="font-family:Georgia,serif; font-size:1.3rem; margin-bottom:16px;">Discovery files</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px;">
+        {% set discovery_files = [
+          ('/api/openapi.json', 'OpenAPI Spec', 'JSON schema for all endpoints'),
+          ('/robots.txt', 'robots.txt', 'AI crawler permissions'),
+          ('/sitemap.xml', 'sitemap.xml', 'Full page index'),
+          ('/.well-known/ai-plugin.json', 'AI Plugin Manifest', 'ChatGPT / OpenAI plugin'),
+          ('/.well-known/agent-card.json', 'Agent Card', 'A2A protocol discovery'),
+        ] %}
+        {% for url, title, desc in discovery_files %}
+        <a href="{{ url }}" style="background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-decoration:none; display:block;">
+          <div style="font-weight:600; color:var(--text); margin-bottom:4px; font-size:0.9rem;">{{ title }}</div>
+          <div style="color:var(--muted); font-size:0.82rem;">{{ desc }}</div>
+          <div style="color:var(--accent); font-size:0.78rem; margin-top:6px; font-family:monospace;">{{ url }}</div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

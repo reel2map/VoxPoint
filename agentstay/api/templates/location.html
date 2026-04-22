@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Location — F1 Penthouse Florence, Via dei Federighi 1{% endblock %}
+{% block description %}F1 Penthouse Florence is located at Via dei Federighi 1, Centro Storico. Walk to Ponte Vecchio (8 min), Uffizi (9 min), SMN station (7 min), Duomo (10 min). The best address in Florence.{% endblock %}
+{% block canonical_path %}/location{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "F1 Penthouse Florence",
+  "url": "{{ base_url }}/location",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ property.address.street }}",
+    "addressLocality": "{{ property.address.city }}",
+    "addressRegion": "{{ property.address.region }}",
+    "postalCode": "{{ property.address.postal_code }}",
+    "addressCountry": "{{ property.address.country_code }}"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ property.coordinates.lat }},
+    "longitude": {{ property.coordinates.lng }}
+  },
+  "hasMap": "https://maps.google.com/?q={{ property.coordinates.lat }},{{ property.coordinates.lng }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div style="padding: 32px 0;">
+  <div class="container">
+    <nav class="breadcrumbs">
+      <a href="/">Home</a><span>›</span>
+      Location
+    </nav>
+
+    <h1 class="section-title" style="margin-top:16px;">Location &amp; Neighbourhood</h1>
+    <p class="section-subtitle">{{ property.address.street }}, {{ property.address.neighborhood }}, {{ property.address.city }}, {{ property.address.country }}</p>
+
+    <!-- MAP -->
+    <div style="margin-bottom:40px; border-radius:var(--radius); overflow:hidden; border:1px solid var(--border);">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2880.7!2d11.2489!3d43.7712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDQ2JzE2LjMiTiAxMcKwMTQnNTYuMSJF!5e0!3m2!1sen!2sit!4v1"
+        width="100%" height="420" style="border:0; display:block;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;">
+      <!-- LANDMARKS -->
+      <div>
+        <h2 style="font-family:Georgia,serif; font-size:1.4rem; margin-bottom:20px;">Walking distances</h2>
+        <ul style="list-style:none;">
+          {% for lm in property.landmarks %}
+          <li style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); font-size:0.95rem;">
+            <span>📍 {{ lm.name }}</span>
+            <span style="margin-left:auto; color:var(--accent); font-weight:600; white-space:nowrap;">{{ lm.walk_minutes }} min walk</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <p style="color:var(--muted); font-size:0.85rem; margin-top:16px;">
+          * Walking times are approximate from {{ property.address.street }}.
+        </p>
+      </div>
+
+      <!-- NEIGHBOURHOOD -->
+      <div>
+        <h2 style="font-family:Georgia,serif; font-size:1.4rem; margin-bottom:16px;">About Centro Storico</h2>
+        <p style="color:var(--muted); margin-bottom:16px;">
+          Centro Storico (Historic Centre) is the beating heart of Florence. The neighbourhood is
+          a UNESCO World Heritage Site and contains more Renaissance art and architecture per square
+          kilometre than almost anywhere else on Earth.
+        </p>
+        <p style="color:var(--muted); margin-bottom:16px;">
+          Via dei Federighi sits between the Arno river and the Santa Croce area — meaning you can
+          walk to both banks of the Arno within minutes, and reach the Uffizi or Ponte Vecchio without
+          crossing any major roads.
+        </p>
+        <p style="color:var(--muted); margin-bottom:24px;">
+          The neighbourhood is walkable, car-free in parts, and well-served by local buses. Santa Maria
+          Novella train station (Eurostar, regional trains to Siena/Pisa/Cinque Terre) is 7 minutes on foot.
+        </p>
+
+        <h3 style="font-family:Georgia,serif; font-size:1.1rem; margin-bottom:12px;">Getting here</h3>
+        <ul style="color:var(--muted); font-size:0.9rem; padding-left:20px; margin-bottom:16px;">
+          <li style="margin-bottom:6px;"><strong>By train:</strong> SMN station, then 7-minute walk</li>
+          <li style="margin-bottom:6px;"><strong>By plane:</strong> Florence Airport (30 min taxi) or Pisa Airport (1h by train)</li>
+          <li style="margin-bottom:6px;"><strong>By car:</strong> Centro Storico is ZTL (restricted traffic zone) — park at Garage dell'Accademia or Oltrarno and walk/taxi</li>
+          <li><strong>Taxi / Uber:</strong> Drop-off directly at {{ property.address.street }}</li>
+        </ul>
+
+        <a href="/book" class="btn-primary">Book from this address</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

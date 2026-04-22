@@ -1,0 +1,31 @@
+name: Deploy La Corsa Suite
+
+on:
+  push:
+    branches:
+      - claude/initial-setup-B947o
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/qvino/voxpoint
+
+            # Pull latest code — only this repo, nothing else
+            git fetch origin claude/initial-setup-B947o
+            git checkout claude/initial-setup-B947o
+            git pull origin claude/initial-setup-B947o
+
+            # Rebuild only the `api` container — db is untouched, no nginx/apache changes
+            cd agentstay
+            docker compose -f docker-compose.prod.yml --env-file .env up -d --build api
+
+            echo "Deploy complete: $(date)"

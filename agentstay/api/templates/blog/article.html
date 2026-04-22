@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} | La Corsa Suite Firenze Blog{% endblock %}
+{% block description %}{{ article.meta_description or '' }}{% endblock %}
+{% block canonical_path %}/blog/{{ article.slug }}{% endblock %}
+
+{% block og_tags %}
+<meta property="og:title" content="{{ article.title }}">
+<meta property="og:description" content="{{ article.meta_description or '' }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ base_url }}/blog/{{ article.slug }}">
+<meta property="og:site_name" content="La Corsa Suite Firenze">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ article.title }}">
+{% endblock %}
+
+{% block ld_json %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | tojson }},
+  "datePublished": "{{ article.date }}",
+  "dateModified": "{{ article.date }}",
+  "image": "{{ article.hero_image }}",
+  "author": { "@type": "Organization", "name": "La Corsa Suite Firenze", "url": "{{ base_url }}" },
+  "publisher": { "@type": "Organization", "name": "La Corsa Suite Firenze", "url": "{{ base_url }}" },
+  "description": {{ (article.meta_description or '') | tojson }}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},
+    {"@type":"ListItem","position":2,"name":"Blog","item":"{{ base_url }}/blog"},
+    {"@type":"ListItem","position":3,"name":{{ article.title | tojson }},"item":"{{ base_url }}/blog/{{ article.slug }}"}
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- ARTICLE HERO -->
+<div class="article-hero">
+  <img src="{{ article.hero_image }}" alt="{{ article.title }}" loading="eager">
+  <div class="article-hero-overlay"></div>
+</div>
+
+<div class="container">
+  <div class="article-layout">
+
+    <!-- MAIN ARTICLE -->
+    <article class="article-content">
+      <nav class="breadcrumbs" style="margin-top: 32px;">
+        <a href="/">Home</a><span>›</span>
+        <a href="/blog">Blog</a><span>›</span>
+        {{ article.title[:55] }}{% if article.title|length > 55 %}…{% endif %}
+      </nav>
+
+      <h1 class="article-title">{{ article.title }}</h1>
+      <div class="article-meta">
+        <span>La Corsa Suite Firenze</span>
+        <span>·</span>
+        <span>{{ article.date_display }}</span>
+        <span>·</span>
+        <span>{{ article.read_minutes }} min read</span>
+      </div>
+
+      <div class="article-body">
+        {{ content_html | safe }}
+      </div>
+
+      <!-- BOTTOM CTA -->
+      <div class="article-cta">
+        <div class="article-cta-inner">
+          <div>
+            <p class="editorial-label" style="margin-bottom: 8px;">La Corsa Suite Firenze</p>
+            <h2>Staying in Florence? Book direct and save.</h2>
+            <p>Private penthouse for up to 7 guests. ★ 4.94/5 from 48 reviews. No platform fees.</p>
+          </div>
+          <div class="article-cta-actions">
+            <a href="/book" class="btn-hero-primary">Check availability</a>
+            <a href="/penthouse-florence" class="btn-hero-ghost">View the suite →</a>
+          </div>
+        </div>
+        <p class="article-cta-note">✓ No Airbnb fees &nbsp;·&nbsp; ★ 4.94/5 &nbsp;·&nbsp; Ponte Vecchio 8 min walk &nbsp;·&nbsp; Personal check-in</p>
+      </div>
+
+      <!-- RELATED ARTICLES -->
+      {% if related_articles %}
+      <div class="article-related">
+        <p class="editorial-label">More guides</p>
+        <div class="related-grid">
+          {% for rel in related_articles %}
+          <a href="/blog/{{ rel.slug }}" class="related-card">
+            <div class="related-img">
+              <img src="{{ rel.hero_image }}" alt="{{ rel.title }}" loading="lazy">
+            </div>
+            <div class="related-body">
+              <p class="related-read">{{ rel.read_minutes }} min</p>
+              <h3>{{ rel.title }}</h3>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="article-sidebar">
+
+      <!-- AVAILABILITY WIDGET -->
+      <div class="sidebar-widget">
+        <div class="sidebar-widget-header">
+          <span class="sidebar-rating">★ {{ property.trust.overall }}</span>
+          <span class="sidebar-rating-count">({{ property.trust.total_reviews }} reviews)</span>
+        </div>
+        <div class="sidebar-price">From <strong>€{{ property.pricing.seasons[0].per_night }}</strong>/night</div>
+        <form action="/availability" method="get" class="sidebar-form">
+          <div class="sidebar-field">
+            <label>Check-in</label>
+            <input type="date" name="check_in" required>
+          </div>
+          <div class="sidebar-field">
+            <label>Check-out</label>
+            <input type="date" name="check_out" required>
+          </div>
+          <div class="sidebar-field">
+            <label>Guests</label>
+            <select name="guests">
+              {% for i in range(1, 8) %}
+              <option value="{{ i }}" {% if i == 2 %}selected{% endif %}>{{ i }} guest{{ 's' if i > 1 else '' }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="sidebar-btn">Check availability →</button>
+        </form>
+        <p class="sidebar-note">No Airbnb fees · Book direct</p>
+      </div>
+
+      <!-- SUITE CARD -->
+      <div class="sidebar-suite">
+        <h3>La Corsa Suite Firenze</h3>
+        <p>{{ property.tagline }}</p>
+        <a href="/penthouse-florence">View the suite →</a>
+      </div>
+
+      <!-- BACK TO BLOG -->
+      <div class="sidebar-back">
+        <a href="/blog">← All Florence guides</a>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<style>
+/* ── Article page ── */
+.article-hero {
+  position: relative;
+  height: 340px;
+  overflow: hidden;
+  background: var(--dark);
+  margin-top: 72px; /* header height */
+}
+.article-hero img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+.article-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(26,20,16,0.6) 100%);
+}
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 64px;
+  padding-bottom: 80px;
+}
+.article-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin: 16px 0 12px;
+  color: var(--text);
+}
+.article-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--sand);
+}
+
+/* ── Article body typography ── */
+.article-body { font-size: 0.97rem; line-height: 1.85; color: var(--text); }
+.article-body h2 {
+  font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400;
+  margin: 40px 0 14px; color: var(--text);
+}
+.article-body h3 {
+  font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400;
+  margin: 28px 0 10px; color: var(--text);
+}
+.article-body p { margin-bottom: 16px; color: var(--text); font-weight: 300; }
+.article-body ul, .article-body ol { margin: 0 0 16px 20px; }
+.article-body li { margin-bottom: 6px; font-weight: 300; }
+.article-body strong { font-weight: 500; }
+.article-body em { font-style: italic; }
+.article-body a { color: var(--tobacco); border-bottom: 1px solid rgba(181,152,102,0.3); transition: border-color 0.2s; }
+.article-body a:hover { border-color: var(--tobacco); }
+.article-body blockquote {
+  border-left: 3px solid var(--tobacco);
+  margin: 24px 0; padding: 12px 20px;
+  background: var(--cream-deep); border-radius: 0 4px 4px 0;
+}
+.article-body blockquote p { color: var(--text-muted); font-style: italic; margin: 0; }
+
+/* ── Listing cards (injected) ── */
+.listing-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 32px 0;
+  padding: 24px;
+  background: var(--cream-deep);
+  border-radius: 6px;
+  border: 1px solid var(--sand);
+}
+.listing-card {
+  background: var(--white);
+  border: 1px solid var(--sand);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+.listing-card:hover { box-shadow: 0 4px 16px rgba(34,24,18,0.1); }
+.lc-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  background: var(--tobacco); color: var(--dark);
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+}
+.lc-photo { aspect-ratio: 4/3; overflow: hidden; }
+.lc-photo img { transition: transform 0.4s ease; }
+.listing-card:hover .lc-photo img { transform: scale(1.04); }
+.lc-body { padding: 14px 16px 16px; }
+.lc-neighborhood {
+  font-size: 0.62rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--tobacco); margin-bottom: 4px;
+}
+.lc-name { font-family: var(--font-serif); font-size: 1rem; font-weight: 400; margin-bottom: 4px; color: var(--text); }
+.lc-tagline { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 300; }
+.lc-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.lc-rating { color: #F5A623; font-size: 0.8rem; font-weight: 500; }
+.lc-reviews { font-size: 0.72rem; color: var(--text-muted); }
+.lc-sep { color: var(--sand); }
+.lc-capacity { font-size: 0.72rem; color: var(--text-muted); }
+.lc-highlight { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px; }
+.lc-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.lc-price { font-size: 0.82rem; color: var(--text-muted); }
+.lc-price strong { color: var(--text); font-weight: 600; }
+.lc-btn {
+  display: inline-block; background: var(--tobacco); color: var(--dark);
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 7px 12px; border-radius: 3px; text-decoration: none; white-space: nowrap;
+  transition: background 0.2s;
+}
+.lc-btn:hover { background: #CAB07A; }
+
+/* ── Article CTA ── */
+.article-cta {
+  background: var(--dark);
+  border-radius: 8px;
+  padding: 36px;
+  margin: 48px 0 40px;
+}
+.article-cta-inner {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 32px;
+}
+.article-cta h2 {
+  font-family: var(--font-serif); font-size: 1.4rem; font-weight: 300;
+  color: var(--cream); margin-bottom: 8px;
+}
+.article-cta p { font-size: 0.87rem; color: rgba(244,238,228,0.5); font-weight: 300; }
+.article-cta-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+.article-cta-note {
+  font-size: 0.72rem; color: rgba(244,238,228,0.28); margin-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px;
+}
+
+/* ── Related articles ── */
+.article-related { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--sand); }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.related-card { display: block; text-decoration: none; color: var(--text); }
+.related-img { aspect-ratio: 16/9; overflow: hidden; border-radius: 4px; margin-bottom: 10px; }
+.related-img img { transition: transform 0.4s ease; }
+.related-card:hover .related-img img { transform: scale(1.04); }
+.related-read { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--tobacco); margin-bottom: 4px; }
+.related-card h3 { font-family: var(--font-serif); font-size: 0.88rem; font-weight: 400; line-height: 1.4; color: var(--text); }
+.related-card:hover h3 { color: var(--tobacco); }
+
+/* ── Sidebar ── */
+.article-sidebar { padding-top: 32px; }
+.sidebar-widget {
+  background: var(--white);
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: sticky; top: 100px;
+}
+.sidebar-widget-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.sidebar-rating { color: #F5A623; font-size: 0.88rem; font-weight: 500; }
+.sidebar-rating-count { font-size: 0.75rem; color: var(--text-muted); }
+.sidebar-price { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--sand); }
+.sidebar-price strong { font-size: 1.3rem; color: var(--text); }
+.sidebar-form { display: flex; flex-direction: column; gap: 10px; }
+.sidebar-field { display: flex; flex-direction: column; gap: 4px; }
+.sidebar-field label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tobacco); }
+.sidebar-field input, .sidebar-field select {
+  border: 1px solid var(--sand); border-radius: 4px;
+  padding: 8px 10px; font-size: 0.88rem; font-family: var(--font-sans);
+  background: var(--cream); color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.sidebar-field input:focus, .sidebar-field select:focus { border-color: var(--tobacco); }
+.sidebar-btn {
+  background: var(--tobacco); color: var(--dark); border: none;
+  font-family: var(--font-sans); font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.08em; padding: 12px 16px; border-radius: 4px;
+  cursor: pointer; text-align: center; transition: background 0.2s; margin-top: 4px;
+}
+.sidebar-btn:hover { background: #CAB07A; }
+.sidebar-note { font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 8px; }
+.sidebar-suite {
+  background: var(--dark);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.sidebar-suite h3 { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 400; color: var(--cream); margin-bottom: 6px; }
+.sidebar-suite p { font-size: 0.78rem; color: rgba(244,238,228,0.4); line-height: 1.6; margin-bottom: 12px; font-weight: 300; }
+.sidebar-suite a { font-size: 0.75rem; color: var(--tobacco); letter-spacing: 0.06em; }
+.sidebar-back { padding: 8px 0; }
+.sidebar-back a { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em; transition: color 0.2s; }
+.sidebar-back a:hover { color: var(--tobacco); }
+.breadcrumbs { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
+.breadcrumbs a { color: var(--text-muted); transition: color 0.2s; }
+.breadcrumbs a:hover { color: var(--tobacco); }
+.breadcrumbs span { opacity: 0.4; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .article-layout { grid-template-columns: 1fr; gap: 40px; }
+  .article-sidebar { padding-top: 0; }
+  .sidebar-widget { position: static; }
+  .related-grid { grid-template-columns: 1fr 1fr; }
+  .article-cta-inner { flex-direction: column; gap: 20px; }
+  .article-cta-actions { flex-direction: row; }
+}
+@media (max-width: 640px) {
+  .article-hero { height: 220px; }
+  .related-grid { grid-template-columns: 1fr; }
+  .listing-cards-grid { grid-template-columns: 1fr; }
+  .article-cta-actions { flex-direction: column; }
+  .article-cta-actions a { text-align: center; }
+}
+</style>
+
+{% endblock %}
